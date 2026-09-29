@@ -1,0 +1,414 @@
+/* ============================================================
+   PHP ASSIGNMENT 1
+   BOOK MANAGER APPLICATION
+   ============================================================
+
+   FILE: style.css
+
+   PURPOSE:
+   This file controls the visual appearance of our
+   Book Manager application.
+
+   We keep CSS separate from our PHP and HTML files
+   because this makes the project easier to organize,
+   maintain, and understand.
+
+   ============================================================ */
+
+
+/* ============================================================
+   STEP 1: BASIC PAGE RESET
+   ============================================================
+
+   We remove the browser's default margin and padding
+   so that we have better control over our layout.
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   STEP 2: BODY STYLING
+   ============================================================
+
+   This controls the overall appearance of the webpage.
+   ============================================================ */
+
+body {
+    margin: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background-color: #f4f6f8;
+
+    color: #333333;
+
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   STEP 3: REUSABLE CONTAINER
+   ============================================================
+
+   The container keeps our content from becoming
+   extremely wide on large computer screens.
+
+   "margin: 0 auto" centers the container.
+   ============================================================ */
+
+.container {
+    width: 90%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   STEP 4: WEBSITE HEADER
+   ============================================================ */
+
+.site-header {
+    background-color: #1f4e79;
+
+    color: white;
+
+    padding: 25px 0;
+
+    margin-bottom: 30px;
+}
+
+
+/* ============================================================
+   STEP 5: HEADER TITLE
+   ============================================================ */
+
+.site-header h1 {
+    margin: 0;
+
+    font-size: 32px;
+}
+
+
+/* ============================================================
+   STEP 6: TAGLINE
+   ============================================================ */
+
+.tagline {
+    margin: 5px 0 20px;
+
+    font-size: 16px;
+}
+
+
+/* ============================================================
+   STEP 7: NAVIGATION
+   ============================================================ */
+
+.main-navigation {
+    display: flex;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+
+.main-navigation a {
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+
+.main-navigation a:hover {
+    text-decoration: underline;
+}
+
+
+/* ============================================================
+   STEP 8: PAGE HEADING
+   ============================================================ */
+
+.page-heading {
+    margin-bottom: 20px;
+}
+
+
+.page-heading h2 {
+    margin-bottom: 5px;
+
+    font-size: 28px;
+}
+
+
+/* ============================================================
+   STEP 9: ACTION BAR
+   ============================================================ */
+
+.action-bar {
+    margin-bottom: 20px;
+}
+
+
+/* ============================================================
+   STEP 10: BUTTONS
+   ============================================================ */
+
+.button {
+    display: inline-block;
+
+    background-color: #1f4e79;
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 10px 16px;
+
+    border-radius: 5px;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+
+.button:hover {
+    opacity: 0.85;
+}
+
+
+/* ============================================================
+   STEP 11: SMALL BUTTON
+   ============================================================
+
+   Used for Edit and Delete buttons inside the table.
+   ============================================================ */
+
+.small-button {
+    padding: 6px 10px;
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   STEP 12: DELETE BUTTON
+   ============================================================ */
+
+.delete-button {
+    background-color: #b02a37;
+}
+
+
+/* ============================================================
+   STEP 13: TABLE CONTAINER
+   ============================================================
+
+   Allows the table to scroll horizontally on smaller
+   screens instead of breaking the entire page layout.
+   ============================================================ */
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+
+    background-color: white;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ============================================================
+   STEP 14: TABLE
+   ============================================================ */
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 850px;
+}
+
+
+/* ============================================================
+   STEP 15: TABLE HEADER
+   ============================================================ */
+
+thead {
+    background-color: #1f4e79;
+
+    color: white;
+}
+
+
+th {
+    padding: 12px;
+
+    text-align: left;
+
+    border: 1px solid #d9dee3;
+}
+
+
+/* ============================================================
+   STEP 16: TABLE DATA CELLS
+   ============================================================ */
+
+td {
+    padding: 12px;
+
+    border: 1px solid #d9dee3;
+
+    vertical-align: middle;
+}
+
+
+/* ============================================================
+   STEP 17: ALTERNATING ROW COLORS
+   ============================================================
+
+   Every second row receives a slightly different
+   background color.
+
+   This makes larger tables easier to read.
+   ============================================================ */
+
+tbody tr:nth-child(even) {
+    background-color: #f7f9fb;
+}
+
+
+tbody tr:hover {
+    background-color: #eef4f9;
+}
+
+
+/* ============================================================
+   STEP 18: ACTIONS COLUMN
+   ============================================================ */
+
+.actions {
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   STEP 19: EMPTY MESSAGE
+   ============================================================ */
+
+.empty-message {
+    background-color: white;
+
+    padding: 30px;
+
+    text-align: center;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ============================================================
+   STEP 20: ERROR BOX
+   ============================================================
+
+   Used by error.php when the database connection fails.
+   ============================================================ */
+
+.error-box {
+    background-color: white;
+
+    max-width: 650px;
+
+    margin: 60px auto;
+
+    padding: 40px;
+
+    text-align: center;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+.error-box h1 {
+    margin-top: 0;
+}
+
+
+/* ============================================================
+   STEP 21: FOOTER
+   ============================================================ */
+
+.site-footer {
+    margin-top: 50px;
+
+    padding: 25px 0;
+
+    background-color: #222222;
+
+    color: white;
+
+    text-align: center;
+}
+
+
+.site-footer p {
+    margin: 5px 0;
+}
+
+
+/* ============================================================
+   STEP 22: RESPONSIVE DESIGN
+   ============================================================
+
+   These rules are applied when the screen is
+   700 pixels wide or smaller.
+
+   This helps our application work better on phones
+   and smaller tablets.
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+    .site-header h1 {
+        font-size: 26px;
+    }
+
+
+    .container {
+        width: 94%;
+    }
+
+
+    .main-navigation {
+        gap: 12px;
+    }
+
+
+    .page-heading h2 {
+        font-size: 24px;
+    }
+
+
+    .button {
+        padding: 9px 12px;
+    }
+
+}
