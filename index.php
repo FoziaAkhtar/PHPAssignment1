@@ -234,7 +234,8 @@ require_once "header.php";
 
                     <th>Date Added</th>
 
-                    <th>Actions</th>
+                     <th>Edit</th>
+                     <th>Delete</th>
 
                 </tr>
 
@@ -313,124 +314,54 @@ require_once "header.php";
                             <?= escape($book['date_added']) ?>
                         </td>
 
-
-                        <!-- ======================================
-                             ACTIONS
-                             ====================================== -->
+                        <!-- ======================================================
+                             EDIT BUTTON
+                             ====================================================== -->
 
                         <td class="actions">
 
-                            <a
-                                href="edit.php?id=<?= escape($book['id']) ?>"
-                                class="button small-button"
-                            >
-                                Edit
-                            </a>
+                           <a
+                         href="edit.php?id=<?= escape($book['id']) ?>"
+                         class="button small-button"
+                   >
+                      Edit 
+                  </a>
 
-<!-- ==========================================================
-     STEP 1: DELETE BOOK FORM
-     ==========================================================
-
-     We use a FORM instead of a normal <a> link because
-     our delete.php file expects the book ID to be sent
-     using the POST method.
-
-     Why POST?
-
-     A DELETE operation changes information in the database.
-
-     Therefore, we should not perform the delete operation
-     simply by opening a URL such as:
-
-         delete.php?id=5
-
-     Instead, the browser sends the ID securely through
-     the form using POST.
-
-     The process is:
-
-         User clicks Delete
-                 ↓
-         Confirmation message appears
-                 ↓
-         User confirms
-                 ↓
-         Form sends POST request
-                 ↓
-         delete.php receives the book ID
-                 ↓
-         Database deletes the book
-                 ↓
-         User returns to index.php
-
-     ========================================================== -->
-
-<form
-    method="POST"
-    action="delete.php"
-    style="display: inline;"
-    onsubmit="return confirm('Are you sure you want to delete this book?');"
->
+             </td> 
 
 
-    <!-- ======================================================
-         STEP 2: HIDDEN BOOK ID
-         ======================================================
+            <!-- ======================================================
+            DELETE BUTTON
+            ====================================================== -->
 
-         The user does not need to see the ID.
+            <td class="actions">
 
-         However, delete.php needs to know which book
-         should be deleted.
+                <form
+                   method="POST"
+                   action="delete.php"
+                   style="display: inline;"
+                    onsubmit="return confirm('Are you sure you want to delete this book?');"
+                 >
 
-         Therefore, we use a hidden input.
+                     <!-- Hidden book ID -->
+                     <input
+                         type="hidden"
+                         name="id"
+                         value="<?= escape($book['id']) ?>"
+                  >
 
-         Example:
+                      <!-- Delete button -->
+                     <button
+                        type="submit"
+                        class="button small-button delete-button"
+        >
+                   Delete
+                </button>
 
-         If the book ID is 4, the browser sends:
+             </form>
 
-             id = 4
-
-         The user does not see this field on the page.
-
-         ====================================================== -->
-
-    <input
-        type="hidden"
-        name="id"
-        value="<?= escape($book['id']) ?>"
-    >
-
-
-    <!-- ======================================================
-         STEP 3: DELETE BUTTON
-         ======================================================
-
-         This is the button the user clicks to delete
-         the selected book.
-
-         type="submit" tells the browser to submit the
-         surrounding form.
-
-         The form then sends the book ID to:
-
-             delete.php
-
-         using the POST method.
-
-         ====================================================== -->
-
-    <button
-        type="submit"
-        class="button small-button delete-button"
-    >
-        Delete
-    </button>
-
-
-</form>
-                        </td>
-
-                    </tr>
+         </td>
+                        
 
                 <?php endforeach; ?>
 
