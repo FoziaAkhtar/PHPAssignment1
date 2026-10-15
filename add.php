@@ -1,26 +1,36 @@
+
 <?php
 
 // ============================================================
-// PHP ASSIGNMENT 1
+// PHP ASSIGNMENT 3
 // BOOK MANAGER APPLICATION
 // ============================================================
 //
 // FILE: add.php
 //
 // PURPOSE:
-// This page allows the user to add a new book.
+// Add a new book and optionally upload its cover image.
 //
-// CRUD OPERATION:
-// CREATE
-//
-// The page will:
-//
+// FEATURES:
 // 1. Connect to the database.
-// 2. Display a book entry form.
-// 3. Check that the form was submitted.
-// 4. Validate the user's information.
-// 5. Insert the new book into MySQL.
-// 6. Redirect back to the homepage after success.
+// 2. Display the book entry form.
+// 3. Validate the submitted book details.
+// 4. Validate and save an optional cover image.
+// 5. Create 400px and 100px image versions.
+// 6. Save the thumbnail filename in the database.
+// 7. Redirect to the homepage after success.
+//
+// DATABASE:
+// book_manager
+//
+// TABLE:
+// books
+//
+// IMAGE FOLDER:
+// images/
+//
+// IMAGE PROCESSING:
+// image_util.php
 //
 // ============================================================
 
@@ -28,27 +38,29 @@
 // ============================================================
 // STEP 1: CONNECT TO THE DATABASE
 // ============================================================
-//
-// db.php creates our PDO connection.
-//
-// The connection is stored in:
-//
-// $pdo
-//
-// ============================================================
 
 require_once "db.php";
 
 
 // ============================================================
-// STEP 2: CREATE VARIABLES FOR FORM VALUES
+// STEP 2: LOAD THE IMAGE PROCESSING FUNCTIONS
 // ============================================================
-//
-// These variables allow us to keep the information entered
-// by the user if validation fails.
-//
-// Starting with empty values means the form will initially
-// appear blank.
+
+require_once "image_util.php";
+
+
+// ============================================================
+// STEP 3: SET UP THE IMAGE FOLDER AND DEFAULT IMAGE
+// ============================================================
+
+$imageDirectory = __DIR__ . DIRECTORY_SEPARATOR . "images";
+
+// This is the thumbnail assigned when no image is uploaded.
+$defaultImage = "placeholder_100.jpg";
+
+
+// ============================================================
+// STEP 4: CREATE VARIABLES FOR THE FORM VALUES
 // ============================================================
 
 $title = "";
@@ -60,110 +72,78 @@ $date_added = date("Y-m-d");
 
 
 // ============================================================
-// STEP 3: CREATE AN ARRAY FOR VALIDATION ERRORS
-// ============================================================
-//
-// If the user enters invalid information, we can store
-// the error messages inside this array.
-//
-// Example:
-//
-// $errors[] = "Title is required.";
-//
+// STEP 5: CREATE AN ARRAY FOR VALIDATION ERRORS
 // ============================================================
 
 $errors = [];
 
 
 // ============================================================
-// STEP 4: CHECK WHETHER THE FORM WAS SUBMITTED
+// STEP 6: PREPARE VARIABLES FOR IMAGE UPLOADING
 // ============================================================
-//
-// The form below will use:
-//
-// method="POST"
-//
-// Therefore, when the user clicks "Add Book", PHP will
-// receive the information through $_SERVER["REQUEST_METHOD"].
-//
+
+$imageName = $defaultImage;
+$uploadedOriginalPath = "";
+$uploaded400Path = "";
+$uploaded100Path = "";
+
+
+// ============================================================
+// STEP 7: CHECK WHETHER THE FORM WAS SUBMITTED
 // ============================================================
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-
     // ========================================================
-    // STEP 5: GET THE FORM VALUES
-    // ========================================================
-    //
-    // trim() removes unnecessary spaces from the beginning
-    // and end of the user's input.
-    //
-    // Example:
-    //
-    // "  The Hobbit  "
-    //
-    // becomes:
-    //
-    // "The Hobbit"
-    //
+    // STEP 8: GET THE FORM VALUES
     // ========================================================
 
     $title = trim($_POST["title"] ?? "");
-
     $author = trim($_POST["author"] ?? "");
-
     $genre = trim($_POST["genre"] ?? "");
-
     $year_published = trim($_POST["year_published"] ?? "");
-
     $rating = trim($_POST["rating"] ?? "");
-
     $date_added = trim($_POST["date_added"] ?? "");
 
 
     // ========================================================
-    // STEP 6: VALIDATE THE TITLE
+    // STEP 9: VALIDATE THE BOOK TITLE
     // ========================================================
 
     if ($title === "") {
-
         $errors[] = "Book title is required.";
-
     }
 
 
     // ========================================================
-    // STEP 7: VALIDATE THE AUTHOR
+    // STEP 10: VALIDATE THE AUTHOR
     // ========================================================
 
     if ($author === "") {
-
         $errors[] = "Author name is required.";
-
     }
 
 
     // ========================================================
-    // STEP 8: VALIDATE THE GENRE
+    // STEP 11: VALIDATE THE GENRE
     // ========================================================
 
     if ($genre === "") {
-
         $errors[] = "Genre is required.";
-
     }
 
 
     // ========================================================
-    // STEP 9: VALIDATE THE PUBLICATION YEAR
+    // STEP 12: VALIDATE THE PUBLICATION YEAR
     // ========================================================
 
     if ($year_published === "") {
 
         $errors[] = "Publication year is required.";
 
-    } elseif (
-        !filter_var(
+    } else {
+
+        $validYear = filter_var(
             $year_published,
             FILTER_VALIDATE_INT,
             [
@@ -172,16 +152,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     "max_range" => 2100
                 ]
             ]
-        )
-    ) {
+        );
 
-        $errors[] = "Please enter a valid publication year.";
-
+        if ($validYear === false) {
+            $errors[] = "Please enter a valid publication year.";
+        }
     }
 
 
     // ========================================================
-    // STEP 10: VALIDATE THE RATING
+    // STEP 13: VALIDATE THE RATING
     // ========================================================
 
     if ($rating === "") {
@@ -192,37 +172,234 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $errors[] = "Rating must be a number.";
 
-    } elseif ($rating < 0 || $rating > 5) {
+    } elseif ((float) $rating < 0 || (float) $rating > 5) {
 
         $errors[] = "Rating must be between 0 and 5.";
-
     }
 
 
     // ========================================================
-    // STEP 11: VALIDATE THE DATE
+    // STEP 14: VALIDATE THE DATE ADDED
     // ========================================================
 
-    if ($date_added === "") {
+    $dateObject = DateTime::createFromFormat("!Y-m-d", $date_added);
 
-        $errors[] = "Date added is required.";
-
+    if (
+        $date_added === "" ||
+        $dateObject === false ||
+        $dateObject->format("Y-m-d") !== $date_added
+    ) {
+        $errors[] = "Please enter a valid date.";
     }
 
 
     // ========================================================
-    // STEP 12: INSERT THE BOOK INTO THE DATABASE
+    // STEP 15: CHECK WHETHER AN IMAGE WAS UPLOADED
     // ========================================================
     //
-    // We only attempt the INSERT if there are no validation
-    // errors.
+    // Uploading a cover is optional.
     //
-    // IMPORTANT:
-    // We use a prepared statement instead of directly placing
-    // user input inside the SQL statement.
+    // If no image is selected, the default thumbnail will be
+    // saved in the database.
     //
-    // This is safer and helps protect our application
-    // against SQL injection.
+    // Accepted image types:
+    // JPEG, PNG, and GIF.
+    //
+    // Maximum upload size:
+    // 5 MB.
+    //
+    // ========================================================
+
+    $imageToProcess = null;
+
+    if (isset($_FILES["book_image"])) {
+
+        $uploadError = $_FILES["book_image"]["error"];
+
+        // ----------------------------------------------------
+        // STEP 15A: CHECK FOR UPLOAD ERRORS
+        // ----------------------------------------------------
+
+        if ($uploadError !== UPLOAD_ERR_NO_FILE) {
+
+            if ($uploadError !== UPLOAD_ERR_OK) {
+
+                $errors[] = "The image upload failed. Please try again.";
+
+            } else {
+
+                // --------------------------------------------
+                // STEP 15B: CHECK THE FILE SIZE
+                // --------------------------------------------
+
+                $maxFileSize = 5 * 1024 * 1024;
+
+                if ($_FILES["book_image"]["size"] > $maxFileSize) {
+
+                    $errors[] = "The image must be 5 MB or smaller.";
+
+                } else {
+
+                    // ----------------------------------------
+                    // STEP 15C: CHECK THE ACTUAL IMAGE TYPE
+                    // ----------------------------------------
+                    //
+                    // Do not rely only on the filename extension.
+                    // getimagesize() checks the uploaded file.
+                    //
+                    // ----------------------------------------
+
+                    $temporaryPath = $_FILES["book_image"]["tmp_name"];
+
+                    $imageInformation = @getimagesize($temporaryPath);
+
+                    if ($imageInformation === false) {
+
+                        $errors[] = "Please select a valid image file.";
+
+                    } else {
+
+                        $mimeType = $imageInformation["mime"];
+
+                        $allowedImageTypes = [
+                            "image/jpeg" => "jpg",
+                            "image/png"  => "png",
+                            "image/gif"  => "gif"
+                        ];
+
+                        if (!isset($allowedImageTypes[$mimeType])) {
+
+                            $errors[] = "Only JPG, PNG, and GIF images are allowed.";
+
+                        } else {
+
+                            $imageToProcess = [
+                                "temporaryPath" => $temporaryPath,
+                                "extension" => $allowedImageTypes[$mimeType]
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    // ========================================================
+    // STEP 16: SAVE THE IMAGE IF VALIDATION PASSES
+    // ========================================================
+    //
+    // The original image and its two resized versions are saved
+    // in the images folder.
+    //
+    // Example:
+    //
+    // book_123.jpg
+    // book_123_400.jpg
+    // book_123_100.jpg
+    //
+    // The database stores book_123_100.jpg.
+    //
+    // ========================================================
+
+    if (empty($errors) && $imageToProcess !== null) {
+
+        try {
+
+            // -----------------------------------------------
+            // STEP 16A: GENERATE A UNIQUE FILENAME
+            // -----------------------------------------------
+
+            $uniqueBaseName = "book_" . bin2hex(random_bytes(8));
+
+            $extension = "." . $imageToProcess["extension"];
+
+            $originalFileName = $uniqueBaseName . $extension;
+
+            $uploadedOriginalPath =
+                $imageDirectory . DIRECTORY_SEPARATOR . $originalFileName;
+
+            $uploaded400Path =
+                $imageDirectory . DIRECTORY_SEPARATOR .
+                $uniqueBaseName . "_400" . $extension;
+
+            $uploaded100Path =
+                $imageDirectory . DIRECTORY_SEPARATOR .
+                $uniqueBaseName . "_100" . $extension;
+
+
+            // -----------------------------------------------
+            // STEP 16B: MOVE THE UPLOADED IMAGE
+            // -----------------------------------------------
+
+            if (!is_dir($imageDirectory)) {
+                throw new RuntimeException("The images folder was not found.");
+            }
+
+            if (!move_uploaded_file(
+                $imageToProcess["temporaryPath"],
+                $uploadedOriginalPath
+            )) {
+                throw new RuntimeException("The uploaded image could not be saved.");
+            }
+
+
+            // -----------------------------------------------
+            // STEP 16C: CREATE THE RESIZED IMAGES
+            // -----------------------------------------------
+            //
+            // process_image() is provided by image_util.php.
+            //
+            // It creates:
+            // - A maximum 400 x 300 image.
+            // - A maximum 100 x 100 thumbnail.
+            //
+            // -----------------------------------------------
+
+            process_image("images", $originalFileName);
+
+
+            // -----------------------------------------------
+            // STEP 16D: SET THE THUMBNAIL FILENAME
+            // -----------------------------------------------
+
+            $imageName = $uniqueBaseName . "_100" . $extension;
+
+        } catch (Throwable $e) {
+
+            // -----------------------------------------------
+            // STEP 16E: REMOVE INCOMPLETE IMAGE FILES
+            // -----------------------------------------------
+
+            foreach (
+                [
+                    $uploadedOriginalPath,
+                    $uploaded400Path,
+                    $uploaded100Path
+                ] as $filePath
+            ) {
+                if ($filePath !== "" && is_file($filePath)) {
+                    @unlink($filePath);
+                }
+            }
+
+            $imageName = $defaultImage;
+
+            $errors[] =
+                "The image could not be processed. Check the image folder and PHP image support, then try again.";
+        }
+    }
+
+
+    // ========================================================
+    // STEP 17: INSERT THE BOOK INTO THE DATABASE
+    // ========================================================
+    //
+    // Continue only if there are no validation or image errors.
+    //
+    // imageName stores the filename of the thumbnail.
+    //
+    // Prepared statements help protect against SQL injection.
     //
     // ========================================================
 
@@ -238,7 +415,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     genre,
                     year_published,
                     rating,
-                    date_added
+                    date_added,
+                    imageName
                 )
                 VALUES
                 (
@@ -247,7 +425,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     :genre,
                     :year_published,
                     :rating,
-                    :date_added
+                    :date_added,
+                    :imageName
                 )
             ";
 
@@ -255,7 +434,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
             // ==================================================
-            // STEP 13: EXECUTE THE PREPARED STATEMENT
+            // STEP 18: EXECUTE THE PREPARED STATEMENT
             // ==================================================
 
             $statement->execute([
@@ -264,20 +443,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ":genre" => $genre,
                 ":year_published" => $year_published,
                 ":rating" => $rating,
-                ":date_added" => $date_added
+                ":date_added" => $date_added,
+                ":imageName" => $imageName
             ]);
 
 
             // ==================================================
-            // STEP 14: RETURN TO THE MAIN PAGE
-            // ==================================================
-            //
-            // After successfully adding the book, redirect
-            // the user to index.php.
-            //
-            // This also prevents the browser from submitting
-            // the same form again if the user refreshes.
-            //
+            // STEP 19: REDIRECT AFTER SUCCESS
             // ==================================================
 
             header("Location: index.php");
@@ -286,13 +458,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         } catch (PDOException $e) {
 
-            // ==================================================
-            // STEP 15: HANDLE DATABASE ERRORS
-            // ==================================================
-            //
-            // If the INSERT fails, send the user to the
-            // friendly error page.
-            // ==================================================
+            // -----------------------------------------------
+            // REMOVE NEWLY UPLOADED FILES IF THE INSERT FAILS
+            // -----------------------------------------------
+
+            foreach (
+                [
+                    $uploadedOriginalPath,
+                    $uploaded400Path,
+                    $uploaded100Path
+                ] as $filePath
+            ) {
+                if ($filePath !== "" && is_file($filePath)) {
+                    @unlink($filePath);
+                }
+            }
 
             header("Location: error.php");
             exit;
@@ -302,24 +482,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 // ============================================================
-// STEP 16: LOAD THE REUSABLE HEADER
-// ============================================================
-//
-// header.php provides:
-//
-// - HTML structure
-// - CSS
-// - Book Manager heading
-// - Navigation
-//
+// STEP 20: LOAD THE REUSABLE HEADER
 // ============================================================
 
 require_once "header.php";
 
 ?>
 
+
 <!-- ==========================================================
-     STEP 17: PAGE HEADING
+     STEP 21: PAGE HEADING
      ========================================================== -->
 
 <section class="page-heading">
@@ -335,7 +507,7 @@ require_once "header.php";
 
 
 <!-- ==========================================================
-     STEP 18: DISPLAY VALIDATION ERRORS
+     STEP 22: DISPLAY VALIDATION ERRORS
      ========================================================== -->
 
 <?php if (!empty($errors)): ?>
@@ -362,14 +534,23 @@ require_once "header.php";
 
 
 <!-- ==========================================================
-     STEP 19: BOOK FORM
+     STEP 23: BOOK ENTRY FORM
      ========================================================== -->
+<!--
+     IMPORTANT:
+     enctype="multipart/form-data" allows the form to upload
+     an image file to the PHP server.
+-->
 
-<form method="POST" action="add.php">
+<form
+    method="POST"
+    action="add.php"
+    enctype="multipart/form-data"
+>
 
 
     <!-- ======================================================
-         STEP 20: BOOK TITLE
+         STEP 24: BOOK TITLE
          ====================================================== -->
 
     <p>
@@ -392,7 +573,7 @@ require_once "header.php";
 
 
     <!-- ======================================================
-         STEP 21: AUTHOR
+         STEP 25: AUTHOR
          ====================================================== -->
 
     <p>
@@ -415,7 +596,7 @@ require_once "header.php";
 
 
     <!-- ======================================================
-         STEP 22: GENRE
+         STEP 26: GENRE
          ====================================================== -->
 
     <p>
@@ -438,7 +619,7 @@ require_once "header.php";
 
 
     <!-- ======================================================
-         STEP 23: PUBLICATION YEAR
+         STEP 27: PUBLICATION YEAR
          ====================================================== -->
 
     <p>
@@ -463,7 +644,7 @@ require_once "header.php";
 
 
     <!-- ======================================================
-         STEP 24: RATING
+         STEP 28: RATING
          ====================================================== -->
 
     <p>
@@ -495,7 +676,7 @@ require_once "header.php";
 
 
     <!-- ======================================================
-         STEP 25: DATE ADDED
+         STEP 29: DATE ADDED
          ====================================================== -->
 
     <p>
@@ -518,7 +699,36 @@ require_once "header.php";
 
 
     <!-- ======================================================
-         STEP 26: FORM BUTTONS
+         STEP 30: BOOK COVER IMAGE
+         ====================================================== -->
+
+    <p>
+
+        <label for="book_image">
+            Book Cover Image
+        </label>
+
+        <br>
+
+        <input
+            type="file"
+            id="book_image"
+            name="book_image"
+            accept="image/jpeg,image/png,image/gif"
+        >
+
+        <br>
+
+        <small>
+            Optional. Select a JPG, PNG, or GIF image.
+            Maximum file size: 5 MB.
+        </small>
+
+    </p>
+
+
+    <!-- ======================================================
+         STEP 31: FORM BUTTONS
          ====================================================== -->
 
     <p>
@@ -540,9 +750,10 @@ require_once "header.php";
 <?php
 
 // ============================================================
-// STEP 27: LOAD THE REUSABLE FOOTER
+// STEP 32: LOAD THE REUSABLE FOOTER
 // ============================================================
 
 require_once "footer.php";
 
 ?>
+

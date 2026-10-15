@@ -1,39 +1,62 @@
+
 /* ============================================================
    PHP ASSIGNMENT 1
    BOOK MANAGER APPLICATION
-   ============================================================
 
    FILE: style.css
 
    PURPOSE:
-   This file controls the visual appearance of our
-   Book Manager application.
+   This file controls the visual design of the Book Manager.
 
-   We keep CSS separate from our PHP and HTML files
-   because this makes the project easier to organize,
-   maintain, and understand.
+   DESIGN GOALS:
+   1. Create a clean, professional interface.
+   2. Make the book collection easy to read.
+   3. Display book covers consistently.
+   4. Make buttons clear and easy to use.
+   5. Support desktop, tablet, and mobile screens.
 
+   IMPORTANT:
+   This file changes styling only. It does not change PHP,
+   database queries, or application functionality.
    ============================================================ */
 
 
 /* ============================================================
-   STEP 1: BASIC PAGE RESET
-   ============================================================
-
-   We remove the browser's default margin and padding
-   so that we have better control over our layout.
+   STEP 1: GLOBAL RESET AND DESIGN VARIABLES
    ============================================================ */
 
 * {
     box-sizing: border-box;
 }
 
+/* Reusable colors make future design changes easier. */
+:root {
+    --primary-color: #1f4e79;
+    --primary-dark: #163a5b;
+    --primary-light: #eaf2f8;
+
+    --background-color: #f4f7fb;
+    --surface-color: #ffffff;
+
+    --text-color: #263445;
+    --muted-color: #687789;
+
+    --border-color: #dce4ed;
+
+    --danger-color: #b02a37;
+    --danger-dark: #8f1f2a;
+
+    --success-color: #20744a;
+
+    --shadow:
+        0 4px 16px rgba(31, 55, 80, 0.08);
+
+    --radius: 10px;
+}
+
 
 /* ============================================================
-   STEP 2: BODY STYLING
-   ============================================================
-
-   This controls the overall appearance of the webpage.
+   STEP 2: BODY AND PAGE BACKGROUND
    ============================================================ */
 
 body {
@@ -41,28 +64,33 @@ body {
 
     font-family: Arial, Helvetica, sans-serif;
 
-    background-color: #f4f6f8;
+    background-color: var(--background-color);
 
-    color: #333333;
+    color: var(--text-color);
 
     line-height: 1.6;
+
+    font-size: 15px;
+}
+
+
+/* Make form controls use the same font as the page. */
+button,
+input,
+select,
+textarea {
+    font: inherit;
 }
 
 
 /* ============================================================
-   STEP 3: REUSABLE CONTAINER
-   ============================================================
-
-   The container keeps our content from becoming
-   extremely wide on large computer screens.
-
-   "margin: 0 auto" centers the container.
+   STEP 3: REUSABLE PAGE CONTAINER
    ============================================================ */
 
 .container {
-    width: 90%;
+    width: 92%;
 
-    max-width: 1200px;
+    max-width: 1250px;
 
     margin: 0 auto;
 }
@@ -73,13 +101,19 @@ body {
    ============================================================ */
 
 .site-header {
-    background-color: #1f4e79;
+    background: linear-gradient(
+        135deg,
+        var(--primary-dark),
+        var(--primary-color)
+    );
 
-    color: white;
+    color: #ffffff;
 
-    padding: 25px 0;
+    padding: 28px 0;
 
-    margin-bottom: 30px;
+    margin-bottom: 32px;
+
+    box-shadow: 0 4px 14px rgba(22, 58, 91, 0.18);
 }
 
 
@@ -91,6 +125,12 @@ body {
     margin: 0;
 
     font-size: 32px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+
+    line-height: 1.25;
 }
 
 
@@ -99,9 +139,11 @@ body {
    ============================================================ */
 
 .tagline {
-    margin: 5px 0 20px;
+    margin: 8px 0 20px;
 
-    font-size: 16px;
+    color: #e2edf7;
+
+    font-size: 15px;
 }
 
 
@@ -112,92 +154,172 @@ body {
 .main-navigation {
     display: flex;
 
-    gap: 20px;
+    align-items: center;
+
+    gap: 12px;
 
     flex-wrap: wrap;
 }
 
 
 .main-navigation a {
-    color: white;
+    display: inline-block;
+
+    color: #ffffff;
 
     text-decoration: none;
 
-    font-weight: bold;
+    font-weight: 600;
+
+    padding: 7px 12px;
+
+    border-radius: 6px;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 
 
 .main-navigation a:hover {
-    text-decoration: underline;
+    background-color: rgba(255, 255, 255, 0.15);
+
+    text-decoration: none;
+}
+
+
+/* Visible keyboard focus helps accessibility. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #f0b429;
+
+    outline-offset: 3px;
 }
 
 
 /* ============================================================
-   STEP 8: PAGE HEADING
+   STEP 8: PAGE HEADINGS
    ============================================================ */
 
 .page-heading {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 
 .page-heading h2 {
-    margin-bottom: 5px;
+    margin: 0 0 8px;
+
+    color: var(--primary-dark);
 
     font-size: 28px;
+
+    line-height: 1.3;
+}
+
+
+.page-heading p {
+    margin: 0;
+
+    color: var(--muted-color);
 }
 
 
 /* ============================================================
    STEP 9: ACTION BAR
+   ============================================================
+
+   Provides spacing above actions such as Add New Book.
    ============================================================ */
 
 .action-bar {
-    margin-bottom: 20px;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 22px;
 }
 
 
 /* ============================================================
-   STEP 10: BUTTONS
+   STEP 10: STANDARD BUTTONS
    ============================================================ */
 
 .button {
-    display: inline-block;
+    display: inline-flex;
 
-    background-color: #1f4e79;
+    align-items: center;
 
-    color: white;
+    justify-content: center;
+
+    gap: 6px;
+
+    background-color: var(--primary-color);
+
+    color: #ffffff;
 
     text-decoration: none;
 
     padding: 10px 16px;
 
-    border-radius: 5px;
+    border-radius: 7px;
 
-    border: none;
+    border: 1px solid transparent;
 
     cursor: pointer;
 
     font-size: 14px;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 
 .button:hover {
-    opacity: 0.85;
+    background-color: var(--primary-dark);
+
+    color: #ffffff;
+
+    box-shadow: 0 3px 8px rgba(31, 78, 121, 0.18);
+
+    transform: translateY(-1px);
+
+    text-decoration: none;
+}
+
+
+.button:active {
+    transform: translateY(0);
 }
 
 
 /* ============================================================
-   STEP 11: SMALL BUTTON
+   STEP 11: SMALL BUTTONS
    ============================================================
 
-   Used for Edit and Delete buttons inside the table.
+   Used for Details, Edit, and Delete actions in the table.
    ============================================================ */
 
 .small-button {
-    padding: 6px 10px;
+    padding: 7px 10px;
 
-    font-size: 13px;
+    font-size: 12px;
+
+    white-space: nowrap;
 }
 
 
@@ -206,7 +328,16 @@ body {
    ============================================================ */
 
 .delete-button {
-    background-color: #b02a37;
+    background-color: var(--danger-color);
+
+    color: #ffffff;
+}
+
+
+.delete-button:hover {
+    background-color: var(--danger-dark);
+
+    color: #ffffff;
 }
 
 
@@ -214,8 +345,8 @@ body {
    STEP 13: TABLE CONTAINER
    ============================================================
 
-   Allows the table to scroll horizontally on smaller
-   screens instead of breaking the entire page layout.
+   The horizontal scrollbar allows the table to remain usable
+   on smaller screens without breaking the page layout.
    ============================================================ */
 
 .table-container {
@@ -223,24 +354,32 @@ body {
 
     overflow-x: auto;
 
-    background-color: white;
+    background-color: var(--surface-color);
 
-    border-radius: 8px;
+    border: 1px solid var(--border-color);
 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    margin-bottom: 30px;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 
 /* ============================================================
-   STEP 14: TABLE
+   STEP 14: BOOK COLLECTION TABLE
    ============================================================ */
 
 table {
     width: 100%;
 
-    border-collapse: collapse;
+    border-collapse: separate;
 
-    min-width: 850px;
+    border-spacing: 0;
+
+    min-width: 1000px;
 }
 
 
@@ -249,18 +388,39 @@ table {
    ============================================================ */
 
 thead {
-    background-color: #1f4e79;
+    background-color: var(--primary-color);
 
-    color: white;
+    color: #ffffff;
 }
 
 
-th {
-    padding: 12px;
+thead th {
+    padding: 15px 13px;
 
     text-align: left;
 
-    border: 1px solid #d9dee3;
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+
+    white-space: nowrap;
+
+    border: none;
+
+    border-bottom: 2px solid var(--primary-dark);
+}
+
+
+/* Keep the top corners of the header neat. */
+thead th:first-child {
+    border-top-left-radius: 9px;
+}
+
+
+thead th:last-child {
+    border-top-right-radius: 9px;
 }
 
 
@@ -268,37 +428,81 @@ th {
    STEP 16: TABLE DATA CELLS
    ============================================================ */
 
-td {
-    padding: 12px;
+tbody td {
+    padding: 13px;
 
-    border: 1px solid #d9dee3;
+    border: none;
+
+    border-bottom: 1px solid var(--border-color);
 
     vertical-align: middle;
+
+    font-size: 13px;
+}
+
+
+/* Remove the bottom border from the last row. */
+tbody tr:last-child td {
+    border-bottom: none;
 }
 
 
 /* ============================================================
-   STEP 17: ALTERNATING ROW COLORS
-   ============================================================
-
-   Every second row receives a slightly different
-   background color.
-
-   This makes larger tables easier to read.
+   STEP 17: ALTERNATING ROW COLORS AND HOVER EFFECT
    ============================================================ */
 
 tbody tr:nth-child(even) {
-    background-color: #f7f9fb;
+    background-color: #f8fafc;
+}
+
+
+tbody tr {
+    transition: background-color 0.2s ease;
 }
 
 
 tbody tr:hover {
-    background-color: #eef4f9;
+    background-color: var(--primary-light);
 }
 
 
 /* ============================================================
-   STEP 18: ACTIONS COLUMN
+   STEP 18: BOOK COVER THUMBNAILS
+   ============================================================
+
+   These styles apply to images inside the book collection
+   table. The object-fit property prevents covers from
+   stretching out of shape.
+   ============================================================ */
+
+table td img {
+    display: block;
+
+    width: 65px;
+
+    height: 90px;
+
+    object-fit: contain;
+
+    object-position: center;
+
+    background-color: #ffffff;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 5px;
+
+    padding: 2px;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+}
+
+
+/* ============================================================
+   STEP 19: ACTIONS COLUMN
+   ============================================================
+
+   Keeps action buttons on one line where possible.
    ============================================================ */
 
 .actions {
@@ -307,31 +511,95 @@ tbody tr:hover {
 
 
 /* ============================================================
-   STEP 19: EMPTY MESSAGE
+   STEP 20: FORMS
+   ============================================================
+
+   These general rules improve forms on Add Book and Edit Book
+   pages without requiring changes to the PHP files.
    ============================================================ */
 
-.empty-message {
-    background-color: white;
+form {
+    margin-bottom: 16px;
+}
 
-    padding: 30px;
 
-    text-align: center;
+input,
+select,
+textarea {
+    max-width: 100%;
 
-    border-radius: 8px;
+    border: 1px solid #cbd5e1;
 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
+
+    padding: 10px 12px;
+
+    color: var(--text-color);
+
+    background-color: #ffffff;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+
+    outline: 2px solid rgba(31, 78, 121, 0.12);
+}
+
+
+input[type="file"] {
+    padding: 8px;
+
+    background-color: #f8fafc;
+}
+
+
+input[type="submit"],
+button[type="submit"] {
+    cursor: pointer;
 }
 
 
 /* ============================================================
-   STEP 20: ERROR BOX
+   STEP 21: EMPTY MESSAGE
+   ============================================================ */
+
+.empty-message {
+    background-color: var(--surface-color);
+
+    padding: 32px;
+
+    text-align: center;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    margin-bottom: 28px;
+
+    color: var(--muted-color);
+}
+
+
+.empty-message h2,
+.empty-message h3 {
+    color: var(--primary-dark);
+}
+
+
+/* ============================================================
+   STEP 22: ERROR BOX
    ============================================================
 
    Used by error.php when the database connection fails.
    ============================================================ */
 
 .error-box {
-    background-color: white;
+    background-color: var(--surface-color);
 
     max-width: 650px;
 
@@ -341,31 +609,84 @@ tbody tr:hover {
 
     text-align: center;
 
-    border-radius: 8px;
+    border: 1px solid var(--border-color);
 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
 }
 
 
 .error-box h1 {
     margin-top: 0;
+
+    color: var(--danger-color);
 }
 
 
 /* ============================================================
-   STEP 21: FOOTER
+   STEP 23: BOOK DETAILS PAGE
+   ============================================================
+
+   These rules support common image and content layouts on
+   book_details.php. Existing PHP class names are preserved.
+   ============================================================ */
+
+.book-details {
+    background-color: var(--surface-color);
+
+    padding: 28px;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    margin-bottom: 28px;
+}
+
+
+.book-details img {
+    max-width: 100%;
+
+    height: auto;
+
+    object-fit: contain;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 7px;
+
+    background-color: #ffffff;
+
+    padding: 5px;
+}
+
+
+.book-details h2 {
+    color: var(--primary-dark);
+
+    margin-top: 0;
+}
+
+
+/* ============================================================
+   STEP 24: FOOTER
    ============================================================ */
 
 .site-footer {
-    margin-top: 50px;
+    margin-top: 55px;
 
-    padding: 25px 0;
+    padding: 26px 0;
 
-    background-color: #222222;
+    background-color: #172b3d;
 
-    color: white;
+    color: #e2eaf2;
 
     text-align: center;
+
+    font-size: 13px;
 }
 
 
@@ -375,40 +696,141 @@ tbody tr:hover {
 
 
 /* ============================================================
-   STEP 22: RESPONSIVE DESIGN
-   ============================================================
-
-   These rules are applied when the screen is
-   700 pixels wide or smaller.
-
-   This helps our application work better on phones
-   and smaller tablets.
+   STEP 25: RESPONSIVE DESIGN — TABLETS
    ============================================================ */
 
-@media (max-width: 700px) {
-
-    .site-header h1 {
-        font-size: 26px;
-    }
-
+@media (max-width: 900px) {
 
     .container {
         width: 94%;
     }
 
-
-    .main-navigation {
-        gap: 12px;
+    .site-header {
+        padding: 24px 0;
     }
 
+    .site-header h1 {
+        font-size: 29px;
+    }
 
     .page-heading h2 {
-        font-size: 24px;
+        font-size: 25px;
     }
 
-
-    .button {
-        padding: 9px 12px;
+    .table-container {
+        border-radius: 8px;
     }
 
 }
+
+
+/* ============================================================
+   STEP 26: RESPONSIVE DESIGN — PHONES
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        width: 94%;
+    }
+
+    .site-header {
+        padding: 22px 0;
+
+        margin-bottom: 24px;
+    }
+
+    .site-header h1 {
+        font-size: 25px;
+    }
+
+    .tagline {
+        font-size: 14px;
+
+        margin-bottom: 15px;
+    }
+
+    .main-navigation {
+        gap: 6px;
+    }
+
+    .main-navigation a {
+        padding: 7px 9px;
+
+        font-size: 13px;
+    }
+
+    .page-heading {
+        margin-bottom: 18px;
+    }
+
+    .page-heading h2 {
+        font-size: 23px;
+    }
+
+    .button {
+        padding: 9px 12px;
+
+        font-size: 13px;
+    }
+
+    .small-button {
+        padding: 7px 9px;
+
+        font-size: 12px;
+    }
+
+    .empty-message {
+        padding: 22px 16px;
+    }
+
+    .error-box {
+        margin: 30px auto;
+
+        padding: 24px 18px;
+    }
+
+    .book-details {
+        padding: 18px;
+    }
+
+    .site-footer {
+        margin-top: 35px;
+
+        padding: 22px 0;
+    }
+
+}
+
+
+/* ============================================================
+   STEP 27: REDUCED MOTION ACCESSIBILITY
+   ============================================================
+
+   Some users prefer fewer animations. This setting respects
+   that preference when their device supports it.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+    }
+
+}
+
+/* ============================================================
+   END OF STYLE.CSS
+   ============================================================ */

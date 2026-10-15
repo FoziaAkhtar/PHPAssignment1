@@ -1,42 +1,26 @@
+
 <?php
 
 // ============================================================
-// PHP ASSIGNMENT 1
+// PHP ASSIGNMENT 3
 // BOOK MANAGER APPLICATION
 // ============================================================
 //
 // FILE: index.php
 //
 // PURPOSE:
-// This is the MAIN PAGE of our Book Manager application.
-//
-// This page will:
-//
-// 1. Connect to the MySQL database.
-// 2. Retrieve all books from the books table.
-// 3. Safely prepare the information for display.
-// 4. Include our reusable header.
-// 5. Display the books in an HTML table.
-// 6. Provide Edit and Delete links.
-// 7. Include our reusable footer.
+// 1. Connect to the database.
+// 2. Retrieve all books, including cover image filenames.
+// 3. Display the book collection in a table.
+// 4. Display book cover thumbnails.
+// 5. Provide View Details, Edit, and Delete actions.
+// 6. Preserve the existing Add Book functionality.
 //
 // ============================================================
 
 
 // ============================================================
 // STEP 1: CONNECT TO THE DATABASE
-// ============================================================
-//
-// We use require_once to load db.php.
-//
-// db.php creates our PDO database connection and stores
-// the connection inside the $pdo variable.
-//
-// require_once means PHP will include this file only once.
-//
-// IMPORTANT:
-// We do NOT write the database connection code again here.
-// It is already contained inside db.php.
 // ============================================================
 
 require_once "db.php";
@@ -45,50 +29,15 @@ require_once "db.php";
 // ============================================================
 // STEP 2: CREATE A SAFE OUTPUT FUNCTION
 // ============================================================
-//
-// Information coming from a database should not be printed
-// directly onto an HTML page.
-//
-// htmlspecialchars() converts special HTML characters
-// into safe HTML entities.
-//
-// For example:
-//
-// <script>
-//
-// would be displayed as text instead of being interpreted
-// as actual browser code.
-//
-// This helps protect our application from Cross-Site
-// Scripting (XSS) attacks.
-//
-// We create a reusable function so that we don't have to
-// write htmlspecialchars() repeatedly.
-// ============================================================
 
 function escape($value)
 {
-    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars((string) $value, ENT_QUOTES, "UTF-8");
 }
 
 
 // ============================================================
 // STEP 3: RETRIEVE ALL BOOKS
-// ============================================================
-//
-// We prepare a SQL SELECT statement.
-//
-// SELECT * means:
-// "Get all columns"
-//
-// FROM books means:
-// "Get the information from our books table."
-//
-// ORDER BY id ASC means:
-// "Display the oldest/lowest ID first."
-//
-// Using PDO's prepare() and execute() is good practice
-// because it separates SQL from data values.
 // ============================================================
 
 try {
@@ -101,30 +50,18 @@ try {
             genre,
             year_published,
             rating,
-            date_added
+            date_added,
+            imageName
         FROM books
         ORDER BY id ASC
     ";
 
     $statement = $pdo->prepare($sql);
-
     $statement->execute();
 
-    // Fetch all records into an array.
     $books = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
-
-    // ========================================================
-    // STEP 4: HANDLE DATABASE QUERY ERRORS
-    // ========================================================
-    //
-    // If something goes wrong while retrieving the books,
-    // send the user to our friendly error page.
-    //
-    // We do NOT display the technical database error
-    // to the normal user.
-    // ========================================================
 
     header("Location: error.php");
     exit;
@@ -132,27 +69,16 @@ try {
 
 
 // ============================================================
-// STEP 5: LOAD THE REUSABLE HEADER
-// ============================================================
-//
-// header.php contains:
-//
-// - HTML document setup
-// - Page title
-// - CSS connection
-// - Application heading
-// - Navigation
-// - Opening <main> element
-//
-// We don't need to repeat all of that code here.
+// STEP 4: LOAD THE REUSABLE HEADER
 // ============================================================
 
 require_once "header.php";
 
 ?>
 
+
 <!-- ==========================================================
-     STEP 6: MAIN PAGE HEADING
+     STEP 5: MAIN PAGE HEADING
      ========================================================== -->
 
 <section class="page-heading">
@@ -167,7 +93,7 @@ require_once "header.php";
 
 
 <!-- ==========================================================
-     STEP 7: ADD BOOK BUTTON
+     STEP 6: ADD BOOK BUTTON
      ========================================================== -->
 
 <div class="action-bar">
@@ -180,14 +106,8 @@ require_once "header.php";
 
 
 <!-- ==========================================================
-     STEP 8: CHECK WHETHER BOOKS EXIST
-     ==========================================================
-//
-// If the database contains no books, we don't want to
-// display an empty table.
-//
-// Instead, we display a friendly message.
-// ========================================================== -->
+     STEP 7: CHECK WHETHER BOOKS EXIST
+     ========================================================== -->
 
 <?php if (count($books) === 0): ?>
 
@@ -205,20 +125,20 @@ require_once "header.php";
 
 
     <!-- ======================================================
-         STEP 9: BOOK TABLE
+         STEP 8: DISPLAY THE BOOK TABLE
          ====================================================== -->
 
     <div class="table-container">
 
         <table>
 
-            <!-- ==================================================
-                 STEP 10: TABLE HEADER
-                 ================================================== -->
+            <!-- TABLE HEADINGS -->
 
             <thead>
 
                 <tr>
+
+                    <th>Cover</th>
 
                     <th>ID</th>
 
@@ -234,8 +154,11 @@ require_once "header.php";
 
                     <th>Date Added</th>
 
-                     <th>Edit</th>
-                     <th>Delete</th>
+                    <th>Details</th>
+
+                    <th>Edit</th>
+
+                    <th>Delete</th>
 
                 </tr>
 
@@ -243,125 +166,178 @@ require_once "header.php";
 
 
             <!-- ==================================================
-                 STEP 11: TABLE BODY
+                 STEP 9: DISPLAY EACH BOOK
                  ================================================== -->
 
             <tbody>
 
                 <?php foreach ($books as $book): ?>
 
+                    <?php
+
+                    // STEP 9A: FIND THE BOOK COVER IMAGE
+
+                    // Use the saved thumbnail filename.
+                    // If no filename exists, use the placeholder.
+
+                    $coverFile = !empty($book["imageName"])
+                        ? basename($book["imageName"])
+                        : "placeholder_100.jpg";
+
+                    $coverPath = __DIR__
+                        . DIRECTORY_SEPARATOR
+                        . "images"
+                        . DIRECTORY_SEPARATOR
+                        . $coverFile;
+
+
+                    // STEP 9B: CHECK WHETHER THE IMAGE EXISTS
+
+                    if (!is_file($coverPath)) {
+                        $coverFile = "placeholder_100.jpg";
+                    }
+
+
+                    // STEP 9C: CREATE THE IMAGE URL
+
+                    $coverUrl = "images/" . rawurlencode($coverFile);
+
+                    ?>
+
                     <tr>
 
-                        <!-- ======================================
-                             BOOK ID
-                             ====================================== -->
+                        <!-- BOOK COVER -->
 
                         <td>
-                            <?= escape($book['id']) ?>
+
+                            <img
+                                src="<?= escape($coverUrl) ?>"
+                                alt="Cover of <?= escape($book["title"]) ?>"
+                                width="70"
+                                height="90"
+                                loading="lazy"
+                                style="object-fit: contain; display: block;"
+                            >
+
                         </td>
 
 
-                        <!-- ======================================
-                             BOOK TITLE
-                             ====================================== -->
+                        <!-- BOOK ID -->
 
                         <td>
-                            <?= escape($book['title']) ?>
+                            <?= escape($book["id"]) ?>
                         </td>
 
 
-                        <!-- ======================================
-                             AUTHOR
-                             ====================================== -->
+                        <!-- BOOK TITLE -->
 
                         <td>
-                            <?= escape($book['author']) ?>
+                            <?= escape($book["title"]) ?>
                         </td>
 
 
-                        <!-- ======================================
-                             GENRE
-                             ====================================== -->
+                        <!-- AUTHOR -->
 
                         <td>
-                            <?= escape($book['genre']) ?>
+                            <?= escape($book["author"]) ?>
                         </td>
 
 
-                        <!-- ======================================
-                             YEAR PUBLISHED
-                             ====================================== -->
+                        <!-- GENRE -->
 
                         <td>
-                            <?= escape($book['year_published']) ?>
+                            <?= escape($book["genre"]) ?>
                         </td>
 
 
-                        <!-- ======================================
-                             RATING
-                             ====================================== -->
+                        <!-- YEAR PUBLISHED -->
 
                         <td>
-                            <?= escape($book['rating']) ?>
+                            <?= escape($book["year_published"]) ?>
                         </td>
 
 
-                        <!-- ======================================
-                             DATE ADDED
-                             ====================================== -->
+                        <!-- RATING -->
 
                         <td>
-                            <?= escape($book['date_added']) ?>
+                            <?= escape($book["rating"]) ?>
                         </td>
 
-                        <!-- ======================================================
-                             EDIT BUTTON
-                             ====================================================== -->
+
+                        <!-- DATE ADDED -->
+
+                        <td>
+                            <?= escape($book["date_added"]) ?>
+                        </td>
+
+
+                        <!-- ==================================================
+                             STEP 10: VIEW BOOK DETAILS
+                             ================================================== -->
 
                         <td class="actions">
 
-                           <a
-                         href="edit.php?id=<?= escape($book['id']) ?>"
-                         class="button small-button"
-                   >
-                      Edit 
-                  </a>
+                            <a
+                                href="book_details.php?id=<?= (int) $book["id"] ?>"
+                                class="button small-button"
+                            >
+                                View Details
+                            </a>
 
-             </td> 
+                        </td>
 
 
-            <!-- ======================================================
-            DELETE BUTTON
-            ====================================================== -->
+                        <!-- ==================================================
+                             STEP 11: EDIT BOOK
+                             ================================================== -->
 
-            <td class="actions">
+                        <td class="actions">
 
-                <form
-                   method="POST"
-                   action="delete.php"
-                   style="display: inline;"
-                    onsubmit="return confirm('Are you sure you want to delete this book?');"
-                 >
+                            <a
+                                href="edit.php?id=<?= (int) $book["id"] ?>"
+                                class="button small-button"
+                            >
+                                Edit
+                            </a>
 
-                     <!-- Hidden book ID -->
-                     <input
-                         type="hidden"
-                         name="id"
-                         value="<?= escape($book['id']) ?>"
-                  >
+                        </td>
 
-                      <!-- Delete button -->
-                     <button
-                        type="submit"
-                        class="button small-button delete-button"
-        >
-                   Delete
-                </button>
 
-             </form>
+                        <!-- ==================================================
+                             STEP 12: DELETE BOOK
+                             ================================================== -->
 
-         </td>
-                        
+                        <td class="actions">
+
+                            <form
+                                method="POST"
+                                action="delete.php"
+                                style="display: inline;"
+                                onsubmit="return confirm('Are you sure you want to delete this book?');"
+                            >
+
+                                <!-- Hidden book ID -->
+
+                                <input
+                                    type="hidden"
+                                    name="id"
+                                    value="<?= (int) $book["id"] ?>"
+                                >
+
+                                <!-- Delete button -->
+
+                                <button
+                                    type="submit"
+                                    class="button small-button delete-button"
+                                >
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
 
                 <?php endforeach; ?>
 
@@ -377,16 +353,7 @@ require_once "header.php";
 <?php
 
 // ============================================================
-// STEP 12: LOAD THE REUSABLE FOOTER
-// ============================================================
-//
-// footer.php contains:
-//
-// - Closing </main>
-// - Footer information
-// - Closing </body>
-// - Closing </html>
-//
+// STEP 13: LOAD THE REUSABLE FOOTER
 // ============================================================
 
 require_once "footer.php";
