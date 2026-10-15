@@ -2,16 +2,18 @@
 <?php
 
 // ============================================================
-// PHP ASSIGNMENT 3 — BOOK MANAGER
-// FILE: edit.php
-//
-// PURPOSE:
-// 1. Find the selected book.
-// 2. Display its existing information and cover.
-// 3. Allow the user to replace the cover image.
-// 4. Preserve the existing cover if no new image is selected.
-// 5. Validate and save the updated book information.
+// ASSIGNMENT 4 — PROTECT THE EDIT BOOK PAGE
 // ============================================================
+//
+// STEP 0: CHECK LOGIN STATUS
+//
+// auth.php checks whether the user is signed in.
+// If the user is not signed in, they are redirected
+// to login_form.php before the Edit Book page can load.
+// ============================================================
+
+require_once "auth.php";
+
 
 
 // STEP 1: CONNECT TO THE DATABASE

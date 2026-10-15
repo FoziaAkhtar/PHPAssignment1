@@ -1,313 +1,245 @@
 
-# Book Manager — PHP Assignment 1, 2 & 3
+# Book Manager Application
+
+A PHP and MySQL web application for managing a personal book collection, with user registration, secure authentication, and session-based access control.
 
 ## Project Overview
 
-Book Manager is a PHP and MySQL web application that allows users to manage a collection of books through a simple, user-friendly interface.
+The Book Manager Application was developed as part of the PHP web development assignments. It allows authenticated users to manage a collection of books through a web-based interface.
 
-The application demonstrates the fundamental CRUD operations:
+The project builds on the earlier book-management functionality by introducing user registration, login, logout, password hashing, and temporary account lockout after repeated unsuccessful login attempts.
 
-- **Create:** Add new books to the collection.
-- **Read:** Display the collection and view individual book details.
-- **Update:** Edit book information and optionally replace book cover images.
-- **Delete:** Remove books from the collection.
+## Features
 
-The project was developed using PHP, MySQL, PDO, HTML5, CSS3, and Git. Image upload and processing functionality was added to enhance the application's features and presentation.
+### Assignment 3 — Book Management
 
----
-
-## Application Purpose
-
-The purpose of Book Manager is to provide a practical way to organize and maintain book information while demonstrating fundamental web development concepts.
-
-Users can:
-
-- View all books in the collection.
-- Add a new book with an optional cover image.
+- Display the book collection.
+- Add new books.
+- View individual book details.
 - Edit existing book information.
-- Upload or replace a book cover image.
-- View individual book details on a dedicated page.
-- Delete a book after confirmation.
-- View information including title, author, genre, publication year, rating, and date added.
+- Delete books.
+- Store and retrieve book records using MySQL.
+- Use PDO prepared statements for database operations.
+- Upload and process book cover images.
+- Validate book information and image uploads.
+- Use reusable PHP files and CSS styling.
 
----
+### Assignment 4 — User Authentication
+
+- Register a new user account.
+- Store passwords securely using PHP's `password_hash()`.
+- Authenticate users using `password_verify()`.
+- Maintain login status using PHP sessions.
+- Regenerate the session ID after successful login.
+- Display the signed-in user's username.
+- Show navigation links based on login status.
+- Log out users and clear their session.
+- Protect restricted pages from unauthenticated access.
+- Track failed login attempts.
+- Temporarily lock an account after three unsuccessful login attempts for five minutes.
 
 ## Technologies Used
 
-The application uses the following technologies and tools:
-
-- **PHP** — Server-side programming and application logic.
-- **MySQL** — Relational database management.
+- **PHP** — Server-side programming.
+- **MySQL** — Database management.
 - **PDO** — Database connectivity and prepared statements.
-- **HTML5** — Webpage structure and forms.
-- **CSS3** — Application styling and responsive layout.
+- **HTML5** — Page structure.
+- **CSS3** — Styling and layout.
 - **XAMPP** — Local development environment.
 - **phpMyAdmin** — Database administration.
-- **Git** — Version control.
-- **GitHub** — Source code hosting and project history.
+- **Visual Studio Code** — Code editor.
+- **Git and GitHub** — Version control and source-code hosting.
 
----
+## Requirements
 
-## Application Features
+Install the following software before running the application:
 
-### 1. Book Collection
+- XAMPP with PHP, Apache, and MySQL/MariaDB.
+- A modern web browser.
+- A code editor such as Visual Studio Code.
 
-The `index.php` page retrieves and displays the books stored in the database.
+## Installation and Setup
 
-The collection includes:
+### Step 1 — Start XAMPP
 
-- Book cover thumbnail.
-- Book ID.
-- Title.
-- Author.
-- Genre.
-- Publication year.
-- Rating.
-- Date added.
-- Links to view, edit, and delete books.
+Start the Apache and MySQL services through the XAMPP control panel or manager.
 
-### 2. Add a Book
+### Step 2 — Place the Project in the Web Server Directory
 
-The `add.php` page allows users to enter information for a new book.
+Place or clone the project into the XAMPP web root.
 
-The form collects the book's title, author, genre, publication year, rating, and date added. Users can also upload a book cover image.
+On macOS, the project directory used for this assignment is:
 
-The application validates submitted information and uses a PDO prepared statement to insert the new record into MySQL.
+`/Applications/XAMPP/xamppfiles/htdocs/PHPAssignment1`
 
-### 3. Book Details
+### Step 3 — Create the Database
 
-The `book_details.php` page displays detailed information about a selected book.
+1. Open phpMyAdmin in your browser.
+2. Create a database named `book_manager`, if it does not already exist.
+3. Import the project's `schema.sql` file if it contains the required database structure.
+4. Ensure the `books` table and `registrations` table exist.
 
-Users can access this page through the Details link in the book collection.
+**Important:** If you already have a working `book_manager` database containing your Assignment 3 book records, preserve that database. Do not drop or recreate it unnecessarily.
 
-The page displays the available book information and cover image, with navigation to return to the collection or edit the selected book.
+### Step 4 — Configure the Database Connection
 
-### 4. Edit a Book
+Open `db.php` and verify that the database settings match your local XAMPP configuration.
 
-The `edit.php` page allows users to update an existing book's information.
+Typical local settings are:
 
-The page retrieves the selected book and displays its current values. Users can modify the information and optionally upload a replacement cover image.
+- Host: `localhost`
+- Database: `book_manager`
+- Username: `root`
+- Password: blank, if that is how your local XAMPP installation is configured.
 
-When a replacement image is not uploaded, the existing cover image is retained.
+Use the credentials configured on your own computer.
 
-The application validates the submitted information and updates the record using a PDO prepared statement.
+### Step 5 — Run the Application
 
-### 5. Delete a Book
+Open this address in your browser:
 
-The `delete.php` page handles book deletion.
+`http://localhost/PHPAssignment1/`
 
-The Delete action uses a confirmation message before the deletion is submitted. The selected book ID is sent using the POST method.
+You should be able to access the login and registration pages and use the application according to its authentication rules.
 
-A PDO prepared statement is used to remove the selected record from the database.
+## Database Structure
 
-### 6. Book Cover Image Upload and Processing
+### 1. Books Table
 
-The application supports uploading and displaying book cover images.
+The `books` table stores book information. Its fields include:
 
-Image-related functionality includes:
+- `id` — Primary key.
+- `title` — Book title.
+- `author` — Author's name.
+- `genre` — Book genre.
+- `year_published` — Publication year.
+- `rating` — Book rating.
+- `date_added` — Date the book was added.
 
-- Uploading cover images when adding a book.
-- Optionally replacing cover images when editing a book.
-- Checking supported image formats.
-- Enforcing an upload size limit in the application.
-- Generating unique filenames for uploaded images.
-- Creating resized image versions for display.
-- Displaying smaller thumbnails in the collection.
-- Providing placeholder images when a cover is unavailable.
+Book cover image information may also be stored, depending on the existing database schema.
 
-The `image_util.php` file contains reusable image-processing functions.
+### 2. Registrations Table
 
-The `images/` directory stores the book cover images, generated image sizes, and placeholder images.
+The `registrations` table stores registered user information and login security data.
 
-Supported upload formats in the application are JPEG, PNG, and GIF, subject to the validation implemented in the PHP upload handlers.
+- `userID` — Primary key.
+- `userName` — Unique username.
+- `password` — Hashed password.
+- `emailAddress` — User's email address.
+- `failedAttempts` — Number of unsuccessful login attempts.
+- `lastFailedLogin` — Timestamp of the most recent unsuccessful login.
 
----
+Passwords are stored as hashes rather than as plain text.
 
-## Database
+## Authentication and Access Control
 
-### Database Name
+### User Registration
 
-`book_manager`
+New users can create an account through `register_user_form.php`. Registration processing is handled by `register_user.php`, which validates the submitted information and hashes the password before storing the account.
 
-### Table Name
+### User Login
 
-`books`
+Users sign in through `login_form.php`. The application verifies their credentials and establishes a PHP session after successful authentication.
 
-### Table Columns
+### Account Lockout
 
-| Column | Data Type | Purpose |
-|---|---|---|
-| `id` | INT | Unique book identifier and primary key |
-| `title` | VARCHAR(255) | Book title |
-| `author` | VARCHAR(255) | Book author |
-| `genre` | VARCHAR(100) | Book genre |
-| `year_published` | INT | Year the book was published |
-| `rating` | DECIMAL(3,1) | Book rating from 0 to 5 |
-| `date_added` | DATE | Date the book was added |
-| `imageName` | VARCHAR(255), nullable | Stored filename of the book cover thumbnail |
+The application tracks unsuccessful login attempts. After three failed attempts, the account is temporarily locked for five minutes.
 
-The `id` column is the primary key and uses `AUTO_INCREMENT`.
+### Protected Pages
 
-The `imageName` column stores the filename associated with a book's cover thumbnail. Image files are stored in the project's `images/` directory.
+The `auth.php` file checks whether a user has an active authenticated session. Pages that require authentication include this file before executing their protected functionality.
 
-**Note:** The database schema used for setup should include the `imageName` column to support the image functionality.
+### User Logout
 
----
+The `logout.php` file clears the login session and redirects the user to the login page.
 
-## Validation and Security
+## Project File Structure
 
-The application demonstrates several basic validation and security practices.
-
-### PDO Prepared Statements
-
-Prepared statements are used for database operations. This helps protect against SQL injection.
-
-### Output Escaping
-
-Database values displayed in HTML are escaped using `htmlspecialchars()` where implemented. This helps reduce the risk of cross-site scripting (XSS).
-
-### Form Validation
-
-The application validates submitted book information, including required fields, publication year, and rating.
-
-The rating must be within the supported range of 0 to 5.
-
-### Image Upload Validation
-
-The image upload functionality checks the uploaded file's format and size before processing it.
-
-### Friendly Error Handling
-
-The `error.php` page provides a user-friendly error message when a database problem occurs, rather than intentionally displaying technical database details to the user.
-
-### Reusable Components
-
-The application uses separate PHP files for database connectivity, shared page elements, error handling, and image processing.
-
----
-
-## Project Structure
+The project includes the following main files and directories:
 
 ```text
 PHPAssignment1/
 │
-├── css/
-│   └── style.css
-│
-├── images/
-│   ├── Book cover images
-│   ├── Resized cover images
-│   └── Placeholder images
-│
-├── add.php
-├── book_details.php
+├── auth.php
 ├── db.php
-├── delete.php
-├── edit.php
-├── error.php
-├── footer.php
 ├── header.php
-├── image_util.php
+├── footer.php
 ├── index.php
+├── add.php
+├── edit.php
+├── delete.php
+├── book_details.php
+│
+├── login.php
+├── login_form.php
+├── login_confirmation.php
+├── logout.php
+│
+├── register_user.php
+├── register_user_form.php
+├── register_user_confirmation.php
+├── user_error.php
+│
+├── image_util.php
+├── error.php
 ├── schema.sql
-├── book_manager.sql
 ├── README.md
-└── .gitignore
+│
+└── css/
+    └── style.css
 ```
 
-The `book_manager.sql` file is included if present in the repository. The exact contents of the SQL files determine whether they contain the complete database structure and sample records.
-
----
-
-## Local Development Environment
-
-The application was developed using XAMPP on a local computer.
-
-### Requirements
-
-- XAMPP with Apache, PHP, and MySQL/MariaDB.
-- A web browser.
-- phpMyAdmin or another MySQL administration tool.
-
-### Application URL
-
-After starting Apache and MySQL in XAMPP, the application can be accessed at:
-
-`http://localhost/PHPAssignment1/`
-
-### Database Setup
-
-1. Start Apache and MySQL in XAMPP.
-2. Open phpMyAdmin at `http://localhost/phpmyadmin/`.
-3. Create the database named `book_manager`, if it does not already exist.
-4. Import the appropriate SQL file containing the database schema and sample data.
-5. Confirm that the `books` table includes the `imageName` column.
-6. Check that the database connection settings in `db.php` match your local environment.
-7. Open `http://localhost/PHPAssignment1/` in your browser.
-
-The `schema.sql` and `book_manager.sql` files should be checked to determine which one contains the complete setup instructions and data for your current version.
-
-### Image Storage
-
-Uploaded images and their resized versions are stored in the `images/` directory.
-
-The PHP process must have permission to write uploaded images to that directory. Keep the image utility file and the image directory in their expected project locations.
-
----
+The structure above lists the principal application files. Additional image directories or supporting files may exist in the project.
 
 ## Testing
 
-The following test scenarios should be performed against the current version of the application before submission.
+The following authentication behaviours have been tested during development:
 
-| Test | Expected Result |
-|---|---|
-| Create a book | A valid new book is saved to MySQL. |
-| Display collection | Existing books appear on the homepage. |
-| View book details | The Details link opens the correct book record. |
-| Update a book | Changes to book information are saved. |
-| Replace a cover | A valid replacement cover is processed and displayed. |
-| Keep existing cover | Editing without uploading another image preserves the current cover. |
-| Delete a book | A confirmation appears and the selected record is deleted after confirmation. |
-| Invalid form input | Invalid values are rejected with an appropriate message. |
-| Invalid image upload | Unsupported or oversized images are rejected by the implemented validation. |
-| Database failure | The application displays the intended friendly error page when the database connection fails. |
+- Successful user registration.
+- Successful login using valid credentials.
+- Access to the book collection after login.
+- Account lockout after three unsuccessful login attempts.
+- Logout and return to the login page.
+- Redirection to the login page when attempting to access protected pages while signed out.
 
-Record a test as **PASS** only after you have personally run it and confirmed the expected result.
+The book-management functionality should also be checked to ensure adding, viewing, editing, deleting, and cover-image handling continue to work after the authentication changes.
 
----
+## Security Considerations
 
-## Version Control and GitHub
+- Passwords are hashed before storage.
+- Password verification uses PHP's password verification function.
+- PDO prepared statements are used for database operations.
+- Usernames displayed in HTML are escaped with `htmlspecialchars()`.
+- Session IDs are regenerated after successful authentication.
+- Restricted pages check authentication before executing protected operations.
+- Login attempts are tracked to support temporary account lockout.
 
-Git is used to track changes to the project, and GitHub hosts the repository.
+This project is intended for local academic development. A production deployment would require additional security review, including CSRF protection, secure session-cookie settings, rate limiting, and HTTPS.
 
-**Repository:** [FoziaAkhtar/PHPAssignment1](https://github.com/FoziaAkhtar/PHPAssignment1)
+## Learning Objectives
 
-The Assignment 3 changes include the book details page, image upload and processing functionality, cover thumbnails, and updates to the collection and editing pages.
+This project demonstrates practical skills in:
 
----
-
-## Learning Outcomes
-
-This project provides practical experience with:
-
-- PHP server-side programming.
-- MySQL database design and queries.
-- PDO database connections and prepared statements.
+- PHP application development.
+- MySQL database design and connectivity.
 - CRUD operations.
-- HTML forms and validation.
-- File uploads and image processing.
-- Reusable PHP components.
-- CSS styling and responsive design.
-- Error handling and basic security practices.
-- Git version control and GitHub collaboration workflows.
-
----
+- Form processing and validation.
+- File uploads and image handling.
+- Password hashing and authentication.
+- Session management and access control.
+- Reusable application components.
+- Git version control and GitHub repository management.
 
 ## Author
 
 **Fozia Akhtar**
 
-**Project:** Book Manager — PHP Assignment 1, 2 & 3
+PHP Web Development Assignment
 
-**Year:** 2026
+## Repository
 
+GitHub: https://github.com/FoziaAkhtar/PHPAssignment1
+
+## Conclusion
+
+The Book Manager Application combines book-collection management with user authentication and session-based access control. It demonstrates the integration of PHP, MySQL, HTML, CSS, and common web application security practices while extending the functionality developed in the earlier assignment.

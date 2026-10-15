@@ -2,42 +2,30 @@
 <?php
 
 // ============================================================
+// ASSIGNMENT 4 — PROTECT THE ADD BOOK PAGE
+// ============================================================
+//
+// STEP 0: CHECK LOGIN STATUS
+//
+// auth.php checks whether the user is signed in.
+// If the user is not signed in, they are redirected
+// to login_form.php before the Add Book page can load.
+//
+// require_once prevents the same file from being included
+// more than once during the request.
+// ============================================================
+
+require_once "auth.php";
+
+
+// ============================================================
 // PHP ASSIGNMENT 3
 // BOOK MANAGER APPLICATION
 // ============================================================
 //
-// FILE: add.php
-//
-// PURPOSE:
-// Add a new book and optionally upload its cover image.
-//
-// FEATURES:
-// 1. Connect to the database.
-// 2. Display the book entry form.
-// 3. Validate the submitted book details.
-// 4. Validate and save an optional cover image.
-// 5. Create 400px and 100px image versions.
-// 6. Save the thumbnail filename in the database.
-// 7. Redirect to the homepage after success.
-//
-// DATABASE:
-// book_manager
-//
-// TABLE:
-// books
-//
-// IMAGE FOLDER:
-// images/
-//
-// IMAGE PROCESSING:
-// image_util.php
-//
+// KEEP ALL YOUR EXISTING CODE BELOW THIS POINT.
 // ============================================================
 
-
-// ============================================================
-// STEP 1: CONNECT TO THE DATABASE
-// ============================================================
 
 require_once "db.php";
 

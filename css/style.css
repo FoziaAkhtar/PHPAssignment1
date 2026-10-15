@@ -61,18 +61,12 @@
 
 body {
     margin: 0;
-
     font-family: Arial, Helvetica, sans-serif;
-
     background-color: var(--background-color);
-
     color: var(--text-color);
-
     line-height: 1.6;
-
     font-size: 15px;
 }
-
 
 /* Make form controls use the same font as the page. */
 button,
@@ -89,9 +83,7 @@ textarea {
 
 .container {
     width: 92%;
-
     max-width: 1250px;
-
     margin: 0 auto;
 }
 
@@ -108,11 +100,8 @@ textarea {
     );
 
     color: #ffffff;
-
     padding: 28px 0;
-
     margin-bottom: 32px;
-
     box-shadow: 0 4px 14px rgba(22, 58, 91, 0.18);
 }
 
@@ -123,13 +112,9 @@ textarea {
 
 .site-header h1 {
     margin: 0;
-
     font-size: 32px;
-
     font-weight: 700;
-
     letter-spacing: 0.3px;
-
     line-height: 1.25;
 }
 
@@ -140,9 +125,7 @@ textarea {
 
 .tagline {
     margin: 8px 0 20px;
-
     color: #e2edf7;
-
     font-size: 15px;
 }
 
@@ -153,26 +136,17 @@ textarea {
 
 .main-navigation {
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
     flex-wrap: wrap;
 }
 
-
 .main-navigation a {
     display: inline-block;
-
     color: #ffffff;
-
     text-decoration: none;
-
     font-weight: 600;
-
     padding: 7px 12px;
-
     border-radius: 6px;
 
     transition:
@@ -180,13 +154,10 @@ textarea {
         color 0.2s ease;
 }
 
-
 .main-navigation a:hover {
     background-color: rgba(255, 255, 255, 0.15);
-
     text-decoration: none;
 }
-
 
 /* Visible keyboard focus helps accessibility. */
 a:focus-visible,
@@ -195,7 +166,6 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
     outline: 3px solid #f0b429;
-
     outline-offset: 3px;
 }
 
@@ -208,43 +178,30 @@ textarea:focus-visible {
     margin-bottom: 24px;
 }
 
-
 .page-heading h2 {
     margin: 0 0 8px;
-
     color: var(--primary-dark);
-
     font-size: 28px;
-
     line-height: 1.3;
 }
 
-
 .page-heading p {
     margin: 0;
-
     color: var(--muted-color);
 }
 
 
 /* ============================================================
    STEP 9: ACTION BAR
-   ============================================================
-
    Provides spacing above actions such as Add New Book.
    ============================================================ */
 
 .action-bar {
     display: flex;
-
     align-items: center;
-
     justify-content: flex-start;
-
     gap: 12px;
-
     flex-wrap: wrap;
-
     margin-bottom: 22px;
 }
 
@@ -255,31 +212,21 @@ textarea:focus-visible {
 
 .button {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 6px;
 
     background-color: var(--primary-color);
-
     color: #ffffff;
-
     text-decoration: none;
 
     padding: 10px 16px;
-
     border-radius: 7px;
-
     border: 1px solid transparent;
-
     cursor: pointer;
 
     font-size: 14px;
-
     font-weight: 600;
-
     line-height: 1.4;
 
     transition:
@@ -288,19 +235,13 @@ textarea:focus-visible {
         transform 0.2s ease;
 }
 
-
 .button:hover {
     background-color: var(--primary-dark);
-
     color: #ffffff;
-
     box-shadow: 0 3px 8px rgba(31, 78, 121, 0.18);
-
     transform: translateY(-1px);
-
     text-decoration: none;
 }
-
 
 .button:active {
     transform: translateY(0);
@@ -309,16 +250,12 @@ textarea:focus-visible {
 
 /* ============================================================
    STEP 11: SMALL BUTTONS
-   ============================================================
-
    Used for Details, Edit, and Delete actions in the table.
    ============================================================ */
 
 .small-button {
     padding: 7px 10px;
-
     font-size: 12px;
-
     white-space: nowrap;
 }
 
@@ -329,37 +266,26 @@ textarea:focus-visible {
 
 .delete-button {
     background-color: var(--danger-color);
-
     color: #ffffff;
 }
 
-
 .delete-button:hover {
     background-color: var(--danger-dark);
-
     color: #ffffff;
 }
 
 
 /* ============================================================
    STEP 13: TABLE CONTAINER
-   ============================================================
-
-   The horizontal scrollbar allows the table to remain usable
-   on smaller screens without breaking the page layout.
    ============================================================ */
 
 .table-container {
     width: 100%;
-
     overflow-x: auto;
 
     background-color: var(--surface-color);
-
     border: 1px solid var(--border-color);
-
     border-radius: var(--radius);
-
     box-shadow: var(--shadow);
 
     margin-bottom: 30px;
@@ -374,11 +300,8 @@ textarea:focus-visible {
 
 table {
     width: 100%;
-
     border-collapse: separate;
-
     border-spacing: 0;
-
     min-width: 1000px;
 }
 
@@ -389,35 +312,23 @@ table {
 
 thead {
     background-color: var(--primary-color);
-
     color: #ffffff;
 }
 
-
 thead th {
     padding: 15px 13px;
-
     text-align: left;
-
     font-size: 13px;
-
     font-weight: 700;
-
     letter-spacing: 0.2px;
-
     white-space: nowrap;
-
     border: none;
-
     border-bottom: 2px solid var(--primary-dark);
 }
 
-
-/* Keep the top corners of the header neat. */
 thead th:first-child {
     border-top-left-radius: 9px;
 }
-
 
 thead th:last-child {
     border-top-right-radius: 9px;
@@ -430,18 +341,12 @@ thead th:last-child {
 
 tbody td {
     padding: 13px;
-
     border: none;
-
     border-bottom: 1px solid var(--border-color);
-
     vertical-align: middle;
-
     font-size: 13px;
 }
 
-
-/* Remove the bottom border from the last row. */
 tbody tr:last-child td {
     border-bottom: none;
 }
@@ -455,11 +360,9 @@ tbody tr:nth-child(even) {
     background-color: #f8fafc;
 }
 
-
 tbody tr {
     transition: background-color 0.2s ease;
 }
-
 
 tbody tr:hover {
     background-color: var(--primary-light);
@@ -468,30 +371,19 @@ tbody tr:hover {
 
 /* ============================================================
    STEP 18: BOOK COVER THUMBNAILS
-   ============================================================
-
-   These styles apply to images inside the book collection
-   table. The object-fit property prevents covers from
-   stretching out of shape.
    ============================================================ */
 
 table td img {
     display: block;
-
     width: 65px;
-
     height: 90px;
 
     object-fit: contain;
-
     object-position: center;
 
     background-color: #ffffff;
-
     border: 1px solid var(--border-color);
-
     border-radius: 5px;
-
     padding: 2px;
 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
@@ -500,9 +392,6 @@ table td img {
 
 /* ============================================================
    STEP 19: ACTIONS COLUMN
-   ============================================================
-
-   Keeps action buttons on one line where possible.
    ============================================================ */
 
 .actions {
@@ -512,49 +401,34 @@ table td img {
 
 /* ============================================================
    STEP 20: FORMS
-   ============================================================
-
-   These general rules improve forms on Add Book and Edit Book
-   pages without requiring changes to the PHP files.
    ============================================================ */
 
 form {
     margin-bottom: 16px;
 }
 
-
 input,
 select,
 textarea {
     max-width: 100%;
-
     border: 1px solid #cbd5e1;
-
     border-radius: 6px;
-
     padding: 10px 12px;
-
     color: var(--text-color);
-
     background-color: #ffffff;
 }
-
 
 input:focus,
 select:focus,
 textarea:focus {
     border-color: var(--primary-color);
-
     outline: 2px solid rgba(31, 78, 121, 0.12);
 }
 
-
 input[type="file"] {
     padding: 8px;
-
     background-color: #f8fafc;
 }
-
 
 input[type="submit"],
 button[type="submit"] {
@@ -568,22 +442,16 @@ button[type="submit"] {
 
 .empty-message {
     background-color: var(--surface-color);
-
     padding: 32px;
-
     text-align: center;
 
     border: 1px solid var(--border-color);
-
     border-radius: var(--radius);
-
     box-shadow: var(--shadow);
 
     margin-bottom: 28px;
-
     color: var(--muted-color);
 }
-
 
 .empty-message h2,
 .empty-message h3 {
@@ -593,80 +461,55 @@ button[type="submit"] {
 
 /* ============================================================
    STEP 22: ERROR BOX
-   ============================================================
-
    Used by error.php when the database connection fails.
    ============================================================ */
 
 .error-box {
     background-color: var(--surface-color);
-
     max-width: 650px;
-
     margin: 60px auto;
-
     padding: 40px;
-
     text-align: center;
 
     border: 1px solid var(--border-color);
-
     border-radius: var(--radius);
-
     box-shadow: var(--shadow);
 }
 
-
 .error-box h1 {
     margin-top: 0;
-
     color: var(--danger-color);
 }
 
 
 /* ============================================================
    STEP 23: BOOK DETAILS PAGE
-   ============================================================
-
-   These rules support common image and content layouts on
-   book_details.php. Existing PHP class names are preserved.
    ============================================================ */
 
 .book-details {
     background-color: var(--surface-color);
-
     padding: 28px;
 
     border: 1px solid var(--border-color);
-
     border-radius: var(--radius);
-
     box-shadow: var(--shadow);
 
     margin-bottom: 28px;
 }
 
-
 .book-details img {
     max-width: 100%;
-
     height: auto;
-
     object-fit: contain;
 
     border: 1px solid var(--border-color);
-
     border-radius: 7px;
-
     background-color: #ffffff;
-
     padding: 5px;
 }
 
-
 .book-details h2 {
     color: var(--primary-dark);
-
     margin-top: 0;
 }
 
@@ -677,18 +520,12 @@ button[type="submit"] {
 
 .site-footer {
     margin-top: 55px;
-
     padding: 26px 0;
-
     background-color: #172b3d;
-
     color: #e2eaf2;
-
     text-align: center;
-
     font-size: 13px;
 }
-
 
 .site-footer p {
     margin: 5px 0;
@@ -740,7 +577,6 @@ button[type="submit"] {
 
     .site-header {
         padding: 22px 0;
-
         margin-bottom: 24px;
     }
 
@@ -750,7 +586,6 @@ button[type="submit"] {
 
     .tagline {
         font-size: 14px;
-
         margin-bottom: 15px;
     }
 
@@ -760,7 +595,6 @@ button[type="submit"] {
 
     .main-navigation a {
         padding: 7px 9px;
-
         font-size: 13px;
     }
 
@@ -774,13 +608,11 @@ button[type="submit"] {
 
     .button {
         padding: 9px 12px;
-
         font-size: 13px;
     }
 
     .small-button {
         padding: 7px 9px;
-
         font-size: 12px;
     }
 
@@ -790,7 +622,6 @@ button[type="submit"] {
 
     .error-box {
         margin: 30px auto;
-
         padding: 24px 18px;
     }
 
@@ -800,7 +631,6 @@ button[type="submit"] {
 
     .site-footer {
         margin-top: 35px;
-
         padding: 22px 0;
     }
 
@@ -809,10 +639,6 @@ button[type="submit"] {
 
 /* ============================================================
    STEP 27: REDUCED MOTION ACCESSIBILITY
-   ============================================================
-
-   Some users prefer fewer animations. This setting respects
-   that preference when their device supports it.
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
@@ -821,15 +647,166 @@ button[type="submit"] {
     *::before,
     *::after {
         scroll-behavior: auto !important;
-
         transition-duration: 0.01ms !important;
-
         animation-duration: 0.01ms !important;
-
         animation-iteration-count: 1 !important;
     }
 
 }
+
+
+/* ============================================================
+   PHP ASSIGNMENT 4
+   STEP 28: PROMINENT LOGIN AND NAVIGATION STYLES
+
+   PURPOSE:
+   1. Make navigation links easier to see.
+   2. Highlight the signed-in user's name.
+   3. Make the Logout link stand out.
+   4. Improve hover effects and readability.
+   ============================================================ */
+
+.main-navigation a {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 6px;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* ============================================================
+   STEP 29: NAVIGATION HOVER EFFECT
+   ============================================================ */
+
+.main-navigation a:hover {
+    background-color: #ffffff;
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+
+/* ============================================================
+   STEP 30: SIGNED-IN USERNAME
+   ============================================================ */
+
+.main-navigation .welcome-message {
+    color: #fff0a6;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 9px 12px;
+    border-radius: 6px;
+    letter-spacing: 0.2px;
+}
+
+
+/* ============================================================
+   STEP 31: LOGOUT LINK
+   ============================================================ */
+
+.main-navigation a[href="logout.php"] {
+    background-color: var(--danger-color);
+    color: #ffffff;
+    font-weight: 800;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+
+/* ============================================================
+   STEP 32: LOGOUT HOVER EFFECT
+   ============================================================ */
+
+.main-navigation a[href="logout.php"]:hover {
+    background-color: var(--danger-dark);
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   STEP 33: LOGIN AND REGISTER LINKS
+   ============================================================ */
+
+.main-navigation a[href="login_form.php"],
+.main-navigation a[href="register_user_form.php"] {
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   STEP 34: RESPONSIVE NAVIGATION
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .main-navigation a {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .main-navigation .welcome-message {
+        font-size: 14px;
+        padding: 8px 6px;
+    }
+
+}
+
+
+/* ============================================================
+   STEP 35: LOGIN ERROR AND ACCOUNT-LOCKOUT MESSAGE
+
+   PURPOSE:
+   Display incorrect username/password and account-lockout
+   messages prominently in red.
+
+   IMPORTANT:
+   This CSS works with the login-error-message class in
+   login_form.php. It changes the appearance only; PHP handles
+   the login verification and account-lockout functionality.
+   ============================================================ */
+
+.login-error-message {
+    /* Dark red text for clear readability. */
+    color: #b91c1c;
+
+    /* Light red background to identify an error. */
+    background-color: #fef2f2;
+
+    /* Red border around the message. */
+    border: 1px solid #dc2626;
+
+    /* Thicker left border makes the message stand out. */
+    border-left: 5px solid #b91c1c;
+
+    /* Rounded corners match the rest of the application. */
+    border-radius: 6px;
+
+    /* Space between the text and the box edges. */
+    padding: 12px 16px;
+
+    /* Space above and below the error message. */
+    margin: 16px 0 20px;
+
+    /* Readable text size and line spacing. */
+    font-size: 16px;
+    line-height: 1.6;
+
+    /* Make the error easier to notice. */
+    font-weight: 600;
+}
+
+
+/* Keep the actual error text bold and red. */
+.login-error-message strong {
+    color: #b91c1c;
+    font-weight: 700;
+}
+
 
 /* ============================================================
    END OF STYLE.CSS

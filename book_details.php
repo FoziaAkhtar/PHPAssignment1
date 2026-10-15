@@ -1,12 +1,19 @@
 <?php
 
+
 // ============================================================
-// ASSIGNMENT 3 — BOOK MANAGER
-// FILE: book_details.php
+// ASSIGNMENT 4 — PROTECT THE BOOK DETAILS PAGE
+// ============================================================
 //
-// PURPOSE:
-// Display the complete information for one selected book.
+// STEP 0: CHECK LOGIN STATUS
+//
+// auth.php checks whether the user is signed in.
+// If the user is not signed in, they are redirected
+// to login_form.php before the book details can load.
 // ============================================================
+
+require_once "auth.php";
+
 
 
 // STEP 1: CONNECT TO THE DATABASE

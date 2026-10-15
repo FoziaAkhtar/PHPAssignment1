@@ -1,32 +1,18 @@
 <?php
 
 // ============================================================
-// PHP ASSIGNMENT 1
-// BOOK MANAGER APPLICATION
+// ASSIGNMENT 4 — PROTECT THE DELETE BOOK PAGE
 // ============================================================
 //
-// FILE: delete.php
+// STEP 0: CHECK LOGIN STATUS
 //
-// PURPOSE:
-// This page deletes an existing book from the database.
-//
-// CRUD OPERATION:
-// DELETE
-//
-// IMPORTANT:
-// We use POST for the actual delete operation.
-//
-// The ID of the book is received from the form on
-// index.php.
-//
-// The page will:
-//
-// 1. Connect to the database.
-// 2. Check that a valid book ID was received.
-// 3. Delete the matching book.
-// 4. Return to the Book Manager homepage.
-//
+// auth.php checks whether the user is signed in.
+// If the user is not signed in, they are redirected
+// to login_form.php before the deletion code can run.
 // ============================================================
+
+require_once "auth.php";
+
 
 
 // ============================================================
