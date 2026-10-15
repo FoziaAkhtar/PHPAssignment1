@@ -1,48 +1,125 @@
 
-# Book Manager — PHP Assignment 1
+# Book Manager — PHP Assignment 1, 2 & 3
 
 ## Project Overview
 
-Book Manager is a PHP and MySQL web application that allows users to manage a collection of books.
+Book Manager is a PHP and MySQL web application that allows users to manage a collection of books through a simple, user-friendly interface.
 
 The application demonstrates the fundamental CRUD operations:
 
-- Create
-- Read
-- Update
-- Delete
+- **Create:** Add new books to the collection.
+- **Read:** Display the collection and view individual book details.
+- **Update:** Edit book information and optionally replace book cover images.
+- **Delete:** Remove books from the collection.
 
-The project was developed using PHP, MySQL, PDO, HTML, and CSS.
+The project was developed using PHP, MySQL, PDO, HTML5, CSS3, and Git. Image upload and processing functionality was added to enhance the application's features and presentation.
 
 ---
 
 ## Application Purpose
 
-The purpose of this application is to provide a simple and user-friendly way to manage book information.
+The purpose of Book Manager is to provide a practical way to organize and maintain book information while demonstrating fundamental web development concepts.
 
 Users can:
 
-- View all books in the collection
-- Add a new book
-- Edit an existing book
-- Delete a book
-- View information such as title, author, genre, publication year, rating, and date added
+- View all books in the collection.
+- Add a new book with an optional cover image.
+- Edit existing book information.
+- Upload or replace a book cover image.
+- View individual book details on a dedicated page.
+- Delete a book after confirmation.
+- View information including title, author, genre, publication year, rating, and date added.
 
 ---
 
 ## Technologies Used
 
-The application uses the following technologies:
+The application uses the following technologies and tools:
 
-- PHP — Server-side programming
-- MySQL — Database management
-- PDO — PHP database connection and prepared statements
-- HTML5 — Page structure
-- CSS3 — Application styling and responsive layout
-- XAMPP — Local development environment
-- phpMyAdmin — Database administration
-- Git — Version control
-- GitHub — Source code repository
+- **PHP** — Server-side programming and application logic.
+- **MySQL** — Relational database management.
+- **PDO** — Database connectivity and prepared statements.
+- **HTML5** — Webpage structure and forms.
+- **CSS3** — Application styling and responsive layout.
+- **XAMPP** — Local development environment.
+- **phpMyAdmin** — Database administration.
+- **Git** — Version control.
+- **GitHub** — Source code hosting and project history.
+
+---
+
+## Application Features
+
+### 1. Book Collection
+
+The `index.php` page retrieves and displays the books stored in the database.
+
+The collection includes:
+
+- Book cover thumbnail.
+- Book ID.
+- Title.
+- Author.
+- Genre.
+- Publication year.
+- Rating.
+- Date added.
+- Links to view, edit, and delete books.
+
+### 2. Add a Book
+
+The `add.php` page allows users to enter information for a new book.
+
+The form collects the book's title, author, genre, publication year, rating, and date added. Users can also upload a book cover image.
+
+The application validates submitted information and uses a PDO prepared statement to insert the new record into MySQL.
+
+### 3. Book Details
+
+The `book_details.php` page displays detailed information about a selected book.
+
+Users can access this page through the Details link in the book collection.
+
+The page displays the available book information and cover image, with navigation to return to the collection or edit the selected book.
+
+### 4. Edit a Book
+
+The `edit.php` page allows users to update an existing book's information.
+
+The page retrieves the selected book and displays its current values. Users can modify the information and optionally upload a replacement cover image.
+
+When a replacement image is not uploaded, the existing cover image is retained.
+
+The application validates the submitted information and updates the record using a PDO prepared statement.
+
+### 5. Delete a Book
+
+The `delete.php` page handles book deletion.
+
+The Delete action uses a confirmation message before the deletion is submitted. The selected book ID is sent using the POST method.
+
+A PDO prepared statement is used to remove the selected record from the database.
+
+### 6. Book Cover Image Upload and Processing
+
+The application supports uploading and displaying book cover images.
+
+Image-related functionality includes:
+
+- Uploading cover images when adding a book.
+- Optionally replacing cover images when editing a book.
+- Checking supported image formats.
+- Enforcing an upload size limit in the application.
+- Generating unique filenames for uploaded images.
+- Creating resized image versions for display.
+- Displaying smaller thumbnails in the collection.
+- Providing placeholder images when a cover is unavailable.
+
+The `image_util.php` file contains reusable image-processing functions.
+
+The `images/` directory stores the book cover images, generated image sizes, and placeholder images.
+
+Supported upload formats in the application are JPEG, PNG, and GIF, subject to the validation implemented in the PHP upload handlers.
 
 ---
 
@@ -50,199 +127,187 @@ The application uses the following technologies:
 
 ### Database Name
 
+`book_manager`
+
+### Table Name
+
+`books`
+
+### Table Columns
+
+| Column | Data Type | Purpose |
+|---|---|---|
+| `id` | INT | Unique book identifier and primary key |
+| `title` | VARCHAR(255) | Book title |
+| `author` | VARCHAR(255) | Book author |
+| `genre` | VARCHAR(100) | Book genre |
+| `year_published` | INT | Year the book was published |
+| `rating` | DECIMAL(3,1) | Book rating from 0 to 5 |
+| `date_added` | DATE | Date the book was added |
+| `imageName` | VARCHAR(255), nullable | Stored filename of the book cover thumbnail |
+
+The `id` column is the primary key and uses `AUTO_INCREMENT`.
+
+The `imageName` column stores the filename associated with a book's cover thumbnail. Image files are stored in the project's `images/` directory.
+
+**Note:** The database schema used for setup should include the `imageName` column to support the image functionality.
+
+---
+
+## Validation and Security
+
+The application demonstrates several basic validation and security practices.
+
+### PDO Prepared Statements
+
+Prepared statements are used for database operations. This helps protect against SQL injection.
+
+### Output Escaping
+
+Database values displayed in HTML are escaped using `htmlspecialchars()` where implemented. This helps reduce the risk of cross-site scripting (XSS).
+
+### Form Validation
+
+The application validates submitted book information, including required fields, publication year, and rating.
+
+The rating must be within the supported range of 0 to 5.
+
+### Image Upload Validation
+
+The image upload functionality checks the uploaded file's format and size before processing it.
+
+### Friendly Error Handling
+
+The `error.php` page provides a user-friendly error message when a database problem occurs, rather than intentionally displaying technical database details to the user.
+
+### Reusable Components
+
+The application uses separate PHP files for database connectivity, shared page elements, error handling, and image processing.
+
+---
+
+## Project Structure
+
 ```text
-book_manager
-
-Table Name
-books
-Table Columns
-Column	Data Type	Purpose
-id	INT	Unique book identifier
-title	VARCHAR(255)	Book title
-author	VARCHAR(255)	Book author
-genre	VARCHAR(100)	Book genre
-year_published	INT	Year the book was published
-rating	DECIMAL(3,1)	Book rating from 0 to 5
-date_added	DATE	Date the book was added
-
-The id column is the primary key and uses AUTO_INCREMENT.
-
-CRUD Features
-Create
-
-The add.php page allows users to enter a new book.
-
-The application validates the submitted information before inserting the record into MySQL.
-
-A PDO prepared statement is used for the database INSERT operation.
-
-Read
-
-The index.php page retrieves all books from the books table and displays them in an HTML table.
-
-The information displayed includes:
-
-ID
-Title
-Author
-Genre
-Year Published
-Rating
-Date Added
-Update
-
-The edit.php page allows users to modify an existing book.
-
-The application first retrieves the selected book and displays its current information.
-
-After the user makes changes, the application validates the information and updates the database using a PDO prepared statement.
-
-Delete
-
-The delete.php page removes a selected book from the database.
-
-The Delete button uses a confirmation message before the deletion is submitted.
-
-The book ID is sent using the POST method.
-
-A PDO prepared statement is used for the DELETE operation.
-
-Validation and Security
-
-The application includes several basic security and validation practices.
-
-PDO Prepared Statements
-
-Prepared statements are used for database operations.
-
-This helps protect the application from SQL injection.
-
-Output Escaping
-
-Database values displayed on HTML pages are processed using:
-
-htmlspecialchars()
-
-This helps protect against Cross-Site Scripting (XSS).
-
-Form Validation
-
-The application checks that required fields contain information.
-
-The publication year must be a valid number.
-
-The rating must be between 0 and 5.
-
-Friendly Error Handling
-
-Database connection and query failures redirect the user to:
-
-error.php
-
-Technical database error information is not displayed to the normal user.
-
-Reusable Components
-
-The application uses reusable PHP files to reduce duplicated code.
-
-db.php
-
-Creates the PDO connection to the MySQL database.
-
-header.php
-
-Contains the reusable HTML header, navigation, and opening main content area.
-
-footer.php
-
-Contains the reusable footer and closing HTML structure.
-
-error.php
-
-Displays a friendly message when a database problem occurs.
-
-Project Structure
 PHPAssignment1/
 │
 ├── css/
 │   └── style.css
 │
-├── db.php
-├── error.php
-├── header.php
-├── footer.php
-├── index.php
+├── images/
+│   ├── Book cover images
+│   ├── Resized cover images
+│   └── Placeholder images
+│
 ├── add.php
-├── edit.php
+├── book_details.php
+├── db.php
 ├── delete.php
+├── edit.php
+├── error.php
+├── footer.php
+├── header.php
+├── image_util.php
+├── index.php
 ├── schema.sql
-└── README.md
-Testing
+├── book_manager.sql
+├── README.md
+└── .gitignore
+```
 
-The application was tested using the following scenarios.
+The `book_manager.sql` file is included if present in the repository. The exact contents of the SQL files determine whether they contain the complete database structure and sample records.
 
-Create Test
+---
 
-A new book was successfully added through the Add Book form.
+## Local Development Environment
 
-Result: PASS
+The application was developed using XAMPP on a local computer.
 
-Read Test
+### Requirements
 
-Existing books were successfully retrieved from MySQL and displayed on the homepage.
+- XAMPP with Apache, PHP, and MySQL/MariaDB.
+- A web browser.
+- phpMyAdmin or another MySQL administration tool.
 
-Result: PASS
+### Application URL
 
-Update Test
+After starting Apache and MySQL in XAMPP, the application can be accessed at:
 
-The rating of an existing book was changed successfully.
+`http://localhost/PHPAssignment1/`
 
-Result: PASS
+### Database Setup
 
-Delete Test
+1. Start Apache and MySQL in XAMPP.
+2. Open phpMyAdmin at `http://localhost/phpmyadmin/`.
+3. Create the database named `book_manager`, if it does not already exist.
+4. Import the appropriate SQL file containing the database schema and sample data.
+5. Confirm that the `books` table includes the `imageName` column.
+6. Check that the database connection settings in `db.php` match your local environment.
+7. Open `http://localhost/PHPAssignment1/` in your browser.
 
-A book was selected for deletion.
+The `schema.sql` and `book_manager.sql` files should be checked to determine which one contains the complete setup instructions and data for your current version.
 
-The confirmation message appeared before deletion.
+### Image Storage
 
-After confirmation, the selected book was successfully removed from the database.
+Uploaded images and their resized versions are stored in the `images/` directory.
 
-Result: PASS
+The PHP process must have permission to write uploaded images to that directory. Keep the image utility file and the image directory in their expected project locations.
 
-Database Failure Test
+---
 
-MySQL was temporarily stopped while Apache remained running.
+## Testing
 
-The application was accessed through the homepage.
+The following test scenarios should be performed against the current version of the application before submission.
 
-The application redirected to the friendly error page instead of displaying a technical database error.
+| Test | Expected Result |
+|---|---|
+| Create a book | A valid new book is saved to MySQL. |
+| Display collection | Existing books appear on the homepage. |
+| View book details | The Details link opens the correct book record. |
+| Update a book | Changes to book information are saved. |
+| Replace a cover | A valid replacement cover is processed and displayed. |
+| Keep existing cover | Editing without uploading another image preserves the current cover. |
+| Delete a book | A confirmation appears and the selected record is deleted after confirmation. |
+| Invalid form input | Invalid values are rejected with an appropriate message. |
+| Invalid image upload | Unsupported or oversized images are rejected by the implemented validation. |
+| Database failure | The application displays the intended friendly error page when the database connection fails. |
 
-MySQL was then restarted and the application returned to normal operation.
+Record a test as **PASS** only after you have personally run it and confirmed the expected result.
 
-Result: PASS
+---
 
-Local Development Environment
+## Version Control and GitHub
 
-The application was developed and tested locally using XAMPP.
+Git is used to track changes to the project, and GitHub hosts the repository.
 
-The application can be accessed through:
+**Repository:** [FoziaAkhtar/PHPAssignment1](https://github.com/FoziaAkhtar/PHPAssignment1)
 
-http://localhost/PHPAssignment1/
-Database Setup
+The Assignment 3 changes include the book details page, image upload and processing functionality, cover thumbnails, and updates to the collection and editing pages.
 
-The database structure and sample records are documented in:
+---
 
-schema.sql
+## Learning Outcomes
 
-The SQL file can be used to recreate the database and the books table.
+This project provides practical experience with:
 
-Author
+- PHP server-side programming.
+- MySQL database design and queries.
+- PDO database connections and prepared statements.
+- CRUD operations.
+- HTML forms and validation.
+- File uploads and image processing.
+- Reusable PHP components.
+- CSS styling and responsive design.
+- Error handling and basic security practices.
+- Git version control and GitHub collaboration workflows.
 
-Fozia Akhtar
+---
 
-PHP Assignment 1
+## Author
 
-2026
+**Fozia Akhtar**
 
+**Project:** Book Manager — PHP Assignment 1, 2 & 3
 
+**Year:** 2026
 
